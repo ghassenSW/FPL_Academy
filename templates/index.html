@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPL Academy</title>
+    <link rel="stylesheet" href="../static/styles.css">
+
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <h1>FPL Academy</h1>
+          <nav>
+            <ul>
+              <li><a href="#" class="active">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </nav>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="main-content">
+          <header>
+            <h2>Dashboard</h2>
+            <button class="btn-action">Action</button>
+          </header>
+
+          <section  class="cards">
+            <!-- Card 1 -->
+            <div class="card">
+              <a href="{{ url_for('price_change') }}"><h3>Price Change</h3>
+              <p>Post the price changes for today</p></a>
+            </div>
+            <!-- Card 2 -->
+            <div class="card">
+                <h3>Injury updates</h3>
+                <p>Post the injuries of today</p>
+              </div>
+            <!-- Card 3 -->
+            <div class="card">
+                    <h2>Clean Sheet Stats</h2>
+                    <div class="table">
+                        {{ cleansheet_data|safe }}
+                        <div id="data-container" data-info='{{ cleansheet_data|tojson }}'></div>
+                    </div>
+                </main>
+            </div>
+
+          </section>
+        </main>
+      </div>
+    <script>
+        const container = document.getElementById('data-container');
+        const data = JSON.parse(container.getAttribute('data-info'));
+    </script>
+</body>
+</html>

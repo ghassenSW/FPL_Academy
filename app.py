@@ -3,14 +3,14 @@ import sqlite3
 import re
 import os 
 from pymongo import MongoClient
-from dotenv import load_dotenv # type: ignore
+from dotenv import load_dotenv
 
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
 
 load_dotenv()
-MONGODB_URI=os.getenv('MONGODB_URI')
+MONGODB_URI=os.environ.get('MONGODB_URI')
 
 client = MongoClient(MONGODB_URI)
 db = client['my_database']

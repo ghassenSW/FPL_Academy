@@ -1,24 +1,26 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import re
-import os
+import os 
+from pymongo import MongoClient
+from dotenv import load_dotenv # type: ignore
+
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
 
-DATABASE = 'users.db'
-if not os.path.exists(DATABASE):
-    with sqlite3.connect(DATABASE) as conn:
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS accounts (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE
-            )
-        ''')
-        conn.commit()
+load_dotenv()
+MONGODB_URI=os.getenv('MONGODB_URI')
+
+client = MongoClient(MONGODB_URI)
+db = client['my_database']
+collection = db['accounts']
+
+if 'accounts' not in db.list_collection_names():
+    db.create_collection('accounts')
+    collection.create_index('username', unique=True)
+    collection.create_index('password', unique=True)
+    collection.create_index('email', unique=True)
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -27,14 +29,12 @@ def login():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
-        with sqlite3.connect(DATABASE) as conn:
-            cursor = conn.cursor()
-            cursor.execute('SELECT * FROM accounts WHERE username = ? AND password = ?', (username, password))
-            account = cursor.fetchone()
+        account = collection.find_one({'username': username, 'password': password})
+
         if account:
             session['loggedin'] = True
-            session['id'] = account[0]  # account[0] is the ID
-            session['username'] = account[1]  # account[1] is the username
+            session['id'] = str(account['_id'])  # MongoDB uses ObjectId
+            session['username'] = account['username']
             return redirect(url_for('index'))
         else:
             msg = 'Incorrect username/password!'
@@ -54,10 +54,8 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        with sqlite3.connect(DATABASE) as conn:
-            cursor = conn.cursor()
-            cursor.execute('SELECT * FROM accounts WHERE username = ?', (username,))
-            account = cursor.fetchone()
+        account = collection.find_one({'username': username})
+
         if account:
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -67,10 +65,7 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
-            with sqlite3.connect(DATABASE) as conn:
-                cursor = conn.cursor()
-                cursor.execute('INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)', (username, password, email))
-                conn.commit()
+            collection.insert_one({'username': username, 'password': password, 'email': email})
             msg = 'You have successfully registered!'
             return render_template('login.html')
     return render_template('register.html', msg=msg)

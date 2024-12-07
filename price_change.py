@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from pymongo import MongoClient
 
+
 def url_to_json(url,key=None):
   response = requests.get(url)
   if response.status_code == 200:

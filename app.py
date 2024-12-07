@@ -3,20 +3,21 @@ import sqlite3
 import re
 import os 
 from pymongo import MongoClient
-
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
 
-# from dotenv import load_dotenv
-# load_dotenv()
-# MONGODB_URI=os.getenv('MONGODB_URI')
+from dotenv import load_dotenv
+load_dotenv()
+MONGODB_URI=os.getenv('MONGODB_URI')
 
-MONGODB_URI=os.environ.get('MONGODB_URI')
+# MONGODB_URI=os.environ.get('MONGODB_URI')
 
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
 collection = db['accounts']
+price_change_db=db['price_change']
 
 if 'accounts' not in db.list_collection_names():
     db.create_collection('accounts')
@@ -74,7 +75,16 @@ def register():
 
 @app.route("/price_change")
 def price_change():
-    return render_template("price_change.html")
+    price_changed=price_change_db.find_one()
+    risers={'players':[price_changed['web_name'][i] for i in range(len(price_changed['web_name'])) if price_changed['cost_change_event'][i]==1],
+            'cost':[price_changed['now_cost'][i] for i in range(len(price_changed['now_cost'])) if price_changed['cost_change_event'][i]==1],
+            'team':[price_changed['team'][i] for i in range(len(price_changed['team'])) if price_changed['cost_change_event'][i]==1]}
+    fallers={'players':[price_changed['web_name'][i] for i in range(len(price_changed['web_name'])) if price_changed['cost_change_event'][i]==-1],
+            'cost':[price_changed['now_cost'][i] for i in range(len(price_changed['now_cost'])) if price_changed['cost_change_event'][i]==-1],
+            'team':[price_changed['team'][i] for i in range(len(price_changed['team'])) if price_changed['cost_change_event'][i]==-1]}
+    current_date=datetime.now()
+    day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
+    return render_template("price_change.html",risers=risers,fallers=fallers,day=day)
 
 @app.route('/index')
 def index():

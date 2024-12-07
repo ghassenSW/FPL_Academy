@@ -7,58 +7,69 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='price_change.css') }}">
 </head>
 <body>
-
+  <h1>Price Changes on day {{day}}</h1>
   <div class="container">
     <!-- Tables Section -->
     <div class="tables">
       <!-- Left Table -->
       <div class="table-card">
-        <h2>Table 1</h2>
+        <div class="card-header">
+          <div class="title">
+              <span>Risers</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="19" x2="12" y2="5"></line>
+                  <polyline points="5 12 12 5 19 12"></polyline>
+              </svg>
+          </div>
+      </div>
+        
         <table>
           <thead>
             <tr>
-              <th>Column 1</th>
-              <th>Column 2</th>
-              <th>Column 3</th>
+              <th>Player</th>
+              <th>Cost</th>
+              <th>Team</th>
             </tr>
           </thead>
           <tbody>
+            {% for i in range(risers.players|length) %}
             <tr>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
+              <td>{{risers.players[i]}}</td>
+              <td>{{risers.cost[i]}}</td>
+              <td>{{risers.team[i]}}</td>
             </tr>
-            <tr>
-              <td>Data 4</td>
-              <td>Data 5</td>
-              <td>Data 6</td>
-            </tr>
+            {%endfor%}
           </tbody>
         </table>
       </div>
 
       <!-- Right Table -->
       <div class="table-card">
-        <h2>Table 2</h2>
+        <div class="card-header">
+          <div class="title">
+              <span>Fallers</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+          </div>
+      </div>
         <table>
           <thead>
             <tr>
-              <th>Column A</th>
-              <th>Column B</th>
-              <th>Column C</th>
+              <th>Player</th>
+              <th>Cost</th>
+              <th>Team</th>
             </tr>
           </thead>
           <tbody>
+            {% for i in range(fallers.players|length) %}
             <tr>
-              <td>Data A</td>
-              <td>Data B</td>
-              <td>Data C</td>
+              <td>{{fallers.players[i]}}</td>
+              <td>{{fallers.cost[i]}}</td>
+              <td>{{fallers.team[i]}}</td>
             </tr>
-            <tr>
-              <td>Data D</td>
-              <td>Data E</td>
-              <td>Data F</td>
-            </tr>
+            {%endfor%}
           </tbody>
         </table>
       </div>

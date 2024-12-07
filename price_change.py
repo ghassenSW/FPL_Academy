@@ -62,4 +62,3 @@ price_change_db.delete_many({})
 price_change_db.insert_one(update)
 
 update_mongo_data()
-

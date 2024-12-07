@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='price_change.css') }}">
+</head>
+<body>
+  <h1>Injuries on day {{day}}</h1>
+  <div class="container">
+    <!-- Tables Section -->
+    <div class="tables">
+      <!-- Left Table -->
+      <div class="table-card">
+        <div class="card-header">
+          <div class="title">
+              <span>Injuried players</span>
+          </div>
+      </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Team</th>
+              <th>Chance of playing</th>
+              <th>news</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in range(injuries.full_name|length) %}
+            <tr>
+              <td>{{injuries.full_name[i]}}</td>
+              <td>{{injuries.team[i]}}</td>
+              <td>{{injuries.chance_of_playing_next_round[i]}}</td>
+              <td>{{injuries.news[i]}}</td>
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+
+    <!-- Button Section -->
+    <div class="button-container">
+      <button class="post-twitter-btn">Post on Twitter</button>
+    </div>
+  </div>
+
+</body>
+</html>

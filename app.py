@@ -19,6 +19,7 @@ client = MongoClient(MONGODB_URI)
 db = client['my_database']
 collection = db['accounts']
 price_change_db=db['price_change']
+injury_updates_db=db['injuries']
 
 if 'accounts' not in db.list_collection_names():
     db.create_collection('accounts')
@@ -86,6 +87,14 @@ def price_change():
     current_date=datetime.now()
     day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
     return render_template("price_change.html",risers=risers,fallers=fallers,day=day)
+
+@app.route("/injury_updates")
+def injury_updates():
+    injuries=injury_updates_db.find_one()
+    
+    current_date=datetime.now()
+    day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
+    return render_template("injury_updates.html",injuries=injuries,day=day)
 
 @app.route('/index')
 def index():

@@ -49,8 +49,8 @@ def update_mongo_data():
     collection.insert_one(new_data)
     print("MongoDB data overwritten successfully with new fpl data.")
 
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 MONGODB_URI=os.getenv('MONGODB_URI')
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
@@ -83,4 +83,4 @@ update = players.to_dict(orient="list")
 injury_updates_db.delete_many({})
 injury_updates_db.insert_one(update)
 
-# update_mongo_data()
+update_mongo_data()

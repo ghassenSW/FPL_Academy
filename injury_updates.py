@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import os
 from pymongo import MongoClient
+from datetime import datetime
 
 
 def url_to_json(url,key=None):
@@ -43,15 +44,51 @@ def prepare(df):
 def condition(row):
   return row['id'] in ids
 
+def df_to_text(players):
+    gw=get_num_gw()
+    tweet_text='🚨 Injury Updates\n\n'
+    match_tag=f'#GW{gw} #FPL #FPL_InjuryUpdates'
+    for index,row in players.iterrows():
+        player_name=row['full_name']
+        team_name=teams_short_names[row['team']]
+        tweet_text+=f'👟 {player_name} (#{team_name})\n'
+        if(row['chance_of_playing_next_round']==100):
+            tweet_text+=f'✅ Availability is now 100%\n'
+        elif row['chance_of_playing_next_round']==0:
+           stat=row['news']
+           tweet_text+=f'⛔️ {stat}\n'
+        else:
+            stat=row['news']
+            tweet_text+=f'🤕 {stat}\n'
+        tweet_text+='\n'
+    tweet_text=tweet_text.strip('\n')
+    tweet_text+='\n\n'+match_tag
+    return tweet_text
+
+def get_injury_updates_text(injury_updates_db,i):
+    injuries=injury_updates_db.find_one()
+    del injuries['_id']
+    df=pd.DataFrame(injuries)
+    df=df.iloc[[i]]
+    text=df_to_text(df)
+    return text
+
 def update_mongo_data():
     new_data =url_to_json('https://fantasy.premierleague.com/api/bootstrap-static/')
     collection.delete_many({})
     collection.insert_one(new_data)
     print("MongoDB data overwritten successfully with new fpl data.")
 
-# from dotenv import load_dotenv
-# load_dotenv()
-MONGODB_URI=os.getenv('MONGODB_URI')
+from dotenv import load_dotenv
+load_dotenv()
+try:
+  MONGODB_URI=os.getenv('MONGODB_URI')
+except Exception as e:
+  try:
+    MONGODB_URI=os.environ.get('MONGODB_URI')
+  except Exception as e2:
+    print(e2)
+
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
 collection = db['fpl_data']
@@ -79,8 +116,9 @@ players = pd.concat([first_condition, second_condition], axis=0, ignore_index=Tr
 players = players.drop_duplicates()
 players=players[['chance_of_playing_next_round','team','full_name','news']]
 
-update = players.to_dict(orient="list")
 injury_updates_db.delete_many({})
-injury_updates_db.insert_one(update)
+for index,row in players.iterrows():
+  update = row.to_dict()
+  injury_updates_db.insert_one(update)
 
-update_mongo_data()
+# update_mongo_data()

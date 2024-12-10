@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Table Dashboard</title>
+  <title>Injury updates</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='price_change.css') }}">
 </head>
 <body>
@@ -29,23 +29,27 @@
             </tr>
           </thead>
           <tbody>
-            {% for i in range(injuries.full_name|length) %}
+            {% for i in range(injuries|length) %}
             <tr>
-              <td>{{injuries.full_name[i]}}</td>
-              <td>{{injuries.team[i]}}</td>
-              <td>{{injuries.chance_of_playing_next_round[i]}}</td>
-              <td>{{injuries.news[i]}}</td>
+              <td>{{injuries[i].full_name}}</td>
+              <td>{{injuries[i].team}}</td>
+              <td>{{injuries[i].chance_of_playing_next_round}}</td>
+              <td>{{injuries[i].news}}</td>
+              <td>
+                <div class="button-container">
+                  <button class="post-twitter-btn" id={{injuries[i]._id}} >COPY</button>
+                </div>
+              </td>
             </tr>
             {%endfor%}
           </tbody>
         </table>
       </div>
-
-    <!-- Button Section -->
-    <div class="button-container">
-      <button class="post-twitter-btn">Post on Twitter</button>
-    </div>
   </div>
+  <script>
+    const num_injuries='{{injuries.full_name|length}}'
+  </script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>

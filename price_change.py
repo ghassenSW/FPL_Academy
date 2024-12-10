@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import os
 from pymongo import MongoClient
+from datetime import datetime
 
 
 def url_to_json(url,key=None):
@@ -39,9 +40,49 @@ def update_mongo_data():
     collection.insert_one(new_data)
     print("MongoDB data overwritten successfully with new fpl data.")
 
+def get_num_gw():
+    present_fixtures=url_to_df('https://fantasy.premierleague.com/api/fixtures/?future=1')
+    num_gw=present_fixtures['event'].min()
+    fixtures=url_to_df('https://fantasy.premierleague.com/api/fixtures')
+    fixtures=fixtures[fixtures['event']==num_gw-1]
+    if fixtures.iloc[-1]['finished']==False:
+        num_gw-=1
+    return num_gw
+
+def df_to_text(df):
+  num_gw=get_num_gw()
+  current_time=datetime.now().date()
+  text=f'💰 FPL Daily Price Changes ({current_time})\n'
+  risers=df[df['cost_change_event']==1]
+  fallers=df[df['cost_change_event']==-1]
+  if(len(risers)!=0):
+    text+=(f'\n📈 Risers:\n')
+    for index,row in risers.iterrows():
+      text+=(f'⬆️ {row["web_name"]} #{row["team"]} £{row["now_cost"]}m\n')
+  if(len(fallers)!=0):
+    text+=(f'\n📉 Fallers:\n')
+    for index,row in fallers.iterrows():
+      text+=(f'⬇️ {row["web_name"]} #{row["team"]} £{row["now_cost"]}m\n')
+  text+=f'\n#FPL #GW{num_gw} #FPL_PriceChanges'
+  return text
+
+def get_price_change_text(price_change_db):
+    price_changed=price_change_db.find_one()
+    del price_changed['_id']
+    df=pd.DataFrame(price_changed)
+    text=df_to_text(df)
+    return text
+
 # from dotenv import load_dotenv
 # load_dotenv()
-MONGODB_URI=os.getenv('MONGODB_URI')
+try:
+  MONGODB_URI=os.getenv('MONGODB_URI')
+except Exception as e:
+  try:
+    MONGODB_URI=os.environ.get('MONGODB_URI')
+  except Exception as e2:
+    print(e2)
+
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
 collection = db['fpl_data']
@@ -64,4 +105,3 @@ update = result_players.to_dict(orient="list")
 price_change_db.delete_many({})
 price_change_db.insert_one(update)
 
-update_mongo_data()

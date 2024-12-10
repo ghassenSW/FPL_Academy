@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Table Dashboard</title>
+  <title>Price Change</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='price_change.css') }}">
 </head>
 <body>
@@ -77,9 +77,9 @@
 
     <!-- Button Section -->
     <div class="button-container">
-      <button class="post-twitter-btn">Post on Twitter</button>
+      <button class="post-twitter-btn" id="copy_price_change">Copy Text</button>
     </div>
   </div>
-
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

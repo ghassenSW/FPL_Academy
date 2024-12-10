@@ -1,19 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-import sqlite3
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import re
 import os 
 from pymongo import MongoClient
 from datetime import datetime
-
+from price_change import get_price_change_text
+from injury_updates import get_injury_updates_text
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
 
-# from dotenv import load_dotenv
-# load_dotenv()
-# MONGODB_URI=os.getenv('MONGODB_URI')
+from dotenv import load_dotenv
+load_dotenv()
+MONGODB_URI=os.getenv('MONGODB_URI')
 
-MONGODB_URI=os.environ.get('MONGODB_URI')
+# MONGODB_URI=os.environ.get('MONGODB_URI')
 
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
@@ -90,11 +90,21 @@ def price_change():
 
 @app.route("/injury_updates")
 def injury_updates():
-    injuries=injury_updates_db.find_one()
-    
+    injuries=list(injury_updates_db.find())
     current_date=datetime.now()
     day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
     return render_template("injury_updates.html",injuries=injuries,day=day)
+
+@app.route('/get-copy-price-change', methods=['GET'])
+def get_copy_price_change():
+    text_to_copy = get_price_change_text(price_change_db)
+    return jsonify({'text': text_to_copy})  
+
+@app.route('/get-copy-injury-updates', methods=['GET'])
+def get_copy_injury_updates():
+    id = request.args.get('id', type=int)
+    text_to_copy = get_injury_updates_text(injury_updates_db,id)
+    return jsonify({'text': text_to_copy})
 
 @app.route('/index')
 def index():

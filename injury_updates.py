@@ -76,31 +76,29 @@ def update_mongo_data():
     collection.insert_one(new_data)
     print("MongoDB data overwritten successfully with new fpl data.")
 
+# from dotenv import load_dotenv
+# load_dotenv()
+try:
+  MONGODB_URI=os.getenv('MONGODB_URI')
+except Exception as e:
+  try:
+    MONGODB_URI=os.environ.get('MONGODB_URI')
+  except Exception as e2:
+    print(e2)
+
+client = MongoClient(MONGODB_URI)
+db = client['my_database']
+collection = db['fpl_data']
+injury_updates_db=db['injuries']
+
+teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
+teams_short_names=dict(zip(teams['name'],teams['short_name']))
+my_map=dict(zip(teams['id'],teams['name']))
+my_map=pd.DataFrame(my_map,index=[0])
+num_gameweek=get_num_gw()
 
 
 if __name__ == '__main__':
-
-  from dotenv import load_dotenv
-  load_dotenv()
-  try:
-    MONGODB_URI=os.getenv('MONGODB_URI')
-  except Exception as e:
-    try:
-      MONGODB_URI=os.environ.get('MONGODB_URI')
-    except Exception as e2:
-      print(e2)
-
-  client = MongoClient(MONGODB_URI)
-  db = client['my_database']
-  collection = db['fpl_data']
-  injury_updates_db=db['injuries']
-
-  teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
-  teams_short_names=dict(zip(teams['name'],teams['short_name']))
-  my_map=dict(zip(teams['id'],teams['name']))
-  my_map=pd.DataFrame(my_map,index=[0])
-  num_gameweek=get_num_gw()
-
   fpl_data=collection.find_one()
   old_stats=pd.DataFrame(fpl_data['elements'])
   new_stats=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')

@@ -10,6 +10,7 @@ from injury_updates import get_injury_updates_text
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
 CORS(app)
+
 # from dotenv import load_dotenv
 # load_dotenv()
 # MONGODB_URI=os.getenv('MONGODB_URI')

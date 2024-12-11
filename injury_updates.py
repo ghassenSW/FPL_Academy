@@ -76,46 +76,50 @@ def update_mongo_data():
     collection.insert_one(new_data)
     print("MongoDB data overwritten successfully with new fpl data.")
 
-# from dotenv import load_dotenv
-# load_dotenv()
-try:
-  MONGODB_URI=os.getenv('MONGODB_URI')
-except Exception as e:
+
+
+if __name__ == '__main__':
+
+  from dotenv import load_dotenv
+  load_dotenv()
   try:
-    MONGODB_URI=os.environ.get('MONGODB_URI')
-  except Exception as e2:
-    print(e2)
+    MONGODB_URI=os.getenv('MONGODB_URI')
+  except Exception as e:
+    try:
+      MONGODB_URI=os.environ.get('MONGODB_URI')
+    except Exception as e2:
+      print(e2)
 
-client = MongoClient(MONGODB_URI)
-db = client['my_database']
-collection = db['fpl_data']
-injury_updates_db=db['injuries']
+  client = MongoClient(MONGODB_URI)
+  db = client['my_database']
+  collection = db['fpl_data']
+  injury_updates_db=db['injuries']
 
-teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
-teams_short_names=dict(zip(teams['name'],teams['short_name']))
-my_map=dict(zip(teams['id'],teams['name']))
-my_map=pd.DataFrame(my_map,index=[0])
-num_gameweek=get_num_gw()
+  teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
+  teams_short_names=dict(zip(teams['name'],teams['short_name']))
+  my_map=dict(zip(teams['id'],teams['name']))
+  my_map=pd.DataFrame(my_map,index=[0])
+  num_gameweek=get_num_gw()
 
-fpl_data=collection.find_one()
-old_stats=pd.DataFrame(fpl_data['elements'])
-new_stats=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')
-old=prepare(old_stats)
-new=prepare(new_stats)
-ids=list(old['id'])
-new=new[new.apply(condition,axis=1)]
-old=old.reset_index(drop=True)
-new=new.reset_index(drop=True)
-conditions=new[['chance_of_playing_next_round','news']]!=old[['chance_of_playing_next_round','news']]
-first_condition=new[conditions['chance_of_playing_next_round']]
-second_condition=new[conditions['news']]
-players = pd.concat([first_condition, second_condition], axis=0, ignore_index=True)
-players = players.drop_duplicates()
-players=players[['chance_of_playing_next_round','team','full_name','news']]
+  fpl_data=collection.find_one()
+  old_stats=pd.DataFrame(fpl_data['elements'])
+  new_stats=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')
+  old=prepare(old_stats)
+  new=prepare(new_stats)
+  ids=list(old['id'])
+  new=new[new.apply(condition,axis=1)]
+  old=old.reset_index(drop=True)
+  new=new.reset_index(drop=True)
+  conditions=new[['chance_of_playing_next_round','news']]!=old[['chance_of_playing_next_round','news']]
+  first_condition=new[conditions['chance_of_playing_next_round']]
+  second_condition=new[conditions['news']]
+  players = pd.concat([first_condition, second_condition], axis=0, ignore_index=True)
+  players = players.drop_duplicates()
+  players=players[['chance_of_playing_next_round','team','full_name','news']]
 
-injury_updates_db.delete_many({})
-for index,row in players.iterrows():
-  update = row.to_dict()
-  injury_updates_db.insert_one(update)
+  injury_updates_db.delete_many({})
+  for index,row in players.iterrows():
+    update = row.to_dict()
+    injury_updates_db.insert_one(update)
 
-# update_mongo_data()
+  update_mongo_data()

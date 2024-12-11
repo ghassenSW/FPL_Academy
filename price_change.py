@@ -74,35 +74,37 @@ def get_price_change_text(price_change_db):
     text=df_to_text(df)
     return text
 
-# from dotenv import load_dotenv
-# load_dotenv()
-try:
-  MONGODB_URI=os.getenv('MONGODB_URI')
-except Exception as e:
+
+if __name__ == '__main__':
+  from dotenv import load_dotenv
+  load_dotenv()
   try:
-    MONGODB_URI=os.environ.get('MONGODB_URI')
-  except Exception as e2:
-    print(e2)
+    MONGODB_URI=os.getenv('MONGODB_URI')
+  except Exception as e:
+    try:
+      MONGODB_URI=os.environ.get('MONGODB_URI')
+    except Exception as e2:
+      print(e2)
 
-client = MongoClient(MONGODB_URI)
-db = client['my_database']
-collection = db['fpl_data']
-price_change_db=db['price_change']
+  client = MongoClient(MONGODB_URI)
+  db = client['my_database']
+  collection = db['fpl_data']
+  price_change_db=db['price_change']
 
-teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
-short_name=dict(zip(teams['id'],teams['short_name']))
-short_name=pd.DataFrame(short_name,index=[0])
+  teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
+  short_name=dict(zip(teams['id'],teams['short_name']))
+  short_name=pd.DataFrame(short_name,index=[0])
 
-fpl_data=collection.find_one()
-old_stats=pd.DataFrame(fpl_data['elements'])
-old=prepare(old_stats)
+  fpl_data=collection.find_one()
+  old_stats=pd.DataFrame(fpl_data['elements'])
+  old=prepare(old_stats)
 
-new_stats=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')
-new=prepare(new_stats)
-unique_to_new = pd.concat([old, new]).drop_duplicates(keep=False)
-result_players = unique_to_new[~unique_to_new.isin(old)].dropna()
+  new_stats=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')
+  new=prepare(new_stats)
+  unique_to_new = pd.concat([old, new]).drop_duplicates(keep=False)
+  result_players = unique_to_new[~unique_to_new.isin(old)].dropna()
 
-update = result_players.to_dict(orient="list")
-price_change_db.delete_many({})
-price_change_db.insert_one(update)
+  update = result_players.to_dict(orient="list")
+  price_change_db.delete_many({})
+  price_change_db.insert_one(update)
 

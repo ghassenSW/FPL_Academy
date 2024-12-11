@@ -9,11 +9,11 @@ from injury_updates import get_injury_updates_text
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
 
-# from dotenv import load_dotenv
-# load_dotenv()
-# MONGODB_URI=os.getenv('MONGODB_URI')
+from dotenv import load_dotenv
+load_dotenv()
+MONGODB_URI=os.getenv('MONGODB_URI')
 
-MONGODB_URI=os.environ.get('MONGODB_URI')
+# MONGODB_URI=os.environ.get('MONGODB_URI')
 
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
@@ -100,17 +100,17 @@ def get_copy_price_change():
     text_to_copy = get_price_change_text(price_change_db)
     return jsonify({'text': text_to_copy})
 
-@app.route('/get-copy-injury-updates', methods=['GET'])
-def get_copy_injury_updates():
-    id = request.args.get('id', type=str)
-    if not id:
-        return jsonify({'error': 'No ID provided'}), 400
-    injuries=list(injury_updates_db.find())
-    injury = next((item for item in injuries if str(item['_id']) == str(id)), None)
-    if not injury:
-        return jsonify({'error': 'Injury not found'}), 404
-    text_to_copy = get_injury_updates_text(injury)
-    return jsonify({'text': text_to_copy})
+# @app.route('/get-copy-injury-updates', methods=['GET'])
+# def get_copy_injury_updates():
+#     id = request.args.get('id', type=str)
+#     if not id:
+#         return jsonify({'error': 'No ID provided'}), 400
+#     injuries=list(injury_updates_db.find())
+#     injury = next((item for item in injuries if str(item['_id']) == str(id)), None)
+#     if not injury:
+#         return jsonify({'error': 'Injury not found'}), 404
+#     text_to_copy = get_injury_updates_text(injury)
+#     return jsonify({'text': text_to_copy})
 
 @app.route('/index')
 def index():

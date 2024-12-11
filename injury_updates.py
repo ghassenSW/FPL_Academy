@@ -113,10 +113,9 @@ players = pd.concat([first_condition, second_condition], axis=0, ignore_index=Tr
 players = players.drop_duplicates()
 players=players[['chance_of_playing_next_round','team','full_name','news']]
 
-
 injury_updates_db.delete_many({})
 for index,row in players.iterrows():
   update = row.to_dict()
   injury_updates_db.insert_one(update)
 
-update_mongo_data()
+# update_mongo_data()

@@ -1,9 +1,11 @@
-name: Injury Updates
+name: injury updates
 
 on:
-  schedule:
-    - cron: '45 0 * * *'  # This runs at 1:00 AM UTC every day
   workflow_dispatch: 
+  workflow_run:
+    workflows: ["price change"]  # Matches the name of the first workflow
+    types:
+      - completed 
 
 jobs:
   fetch-process-upload:

@@ -16,10 +16,12 @@ async function CopyPriceChange() {
     }
 }
 
-async function CopyInjuryUpdates(id) {
+async function CopyInjuryUpdates(event) {
     try {
+        if (event.target.tagName.toLowerCase() === 'button') {
+            const id = event.target.id;
         console.log(id)
-        const response = await fetch(`/get-copy-injury-updates/${id}`);
+        const response = await fetch(`/get-copy-injury-updates?id=${id}`);
         const data = await response.json();
         const textToCopy = data.text;
         
@@ -28,6 +30,7 @@ async function CopyInjuryUpdates(id) {
         }).catch(err => {
             console.error('Failed to copy text: ', err);
         });
+    }
     } catch (error) {
         console.error('Error fetching text: ', error);
     }
@@ -37,9 +40,7 @@ const price_change=document.getElementById('copy_price_change')
 if (price_change)
     price_change.addEventListener('click', CopyPriceChange);
 
-for(let id=0;id<num_injuries;id++)
-{
-    const injury_updates=document.getElementById(`copy_injury_updates${id}`)
-    if(injury_updates)
-        injury_updates.addEventListener('click', () => CopyInjuryUpdates(id));
-}
+
+document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', CopyInjuryUpdates);
+});

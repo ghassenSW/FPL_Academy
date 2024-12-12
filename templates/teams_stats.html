@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier League Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='teams_stats.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="switch-container">
+            <button id="overall-btn" class="switch-btn">Overall</button>
+            <button id="home-btn" class="switch-btn">Home</button>
+            <button id="away-btn" class="switch-btn">Away</button>
+        </div>
+
+        <div class="gw-selection">
+            <label for="start-gw">Start GW:</label>
+            <input type="number" id="start-gw" min="1" max="38" value="1">
+            <label for="end-gw">End GW:</label>
+            <input type="number" id="end-gw" min="1" max="38" value="38">
+            <button id="apply-gw">Apply</button>
+        </div>
+
+        <h1>Premier League Stats</h1>
+        <table class="standings-table">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Goals</th>
+                    <th>xG</th>
+                    <th>Shots</th>
+                    <th>SiB</th>
+                    <th>SoT</th>
+                    <th>BC</th>
+                </tr>
+            </thead>
+            <tbody id="data-table">
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        function updateTable(data) {
+            const tableBody = document.getElementById('data-table');
+            tableBody.innerHTML = '';
+
+            data.forEach(function(team) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${team.team}</td>
+                    <td>${team.goals}</td>
+                    <td>${team.xg}</td>
+                    <td>${team.shots}</td>
+                    <td>${team.sib}</td>
+                    <td>${team.sot}</td>
+                    <td>${team.bc}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        $('#overall-btn').click(function() {
+            $.ajax({
+                url: '/get_stats',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ data_type: 'overall' }),
+                success: function(response) {
+                    updateTable(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+        $('#home-btn').click(function() {
+            $.ajax({
+                url: '/get_stats',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ data_type: 'home' }),
+                success: function(response) {
+                    updateTable(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+        $('#away-btn').click(function() {
+            $.ajax({
+                url: '/get_stats',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ data_type: 'away' }),
+                success: function(response) {
+                    updateTable(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            $('#overall-btn').click();
+        });
+    </script>
+</body>
+</html>

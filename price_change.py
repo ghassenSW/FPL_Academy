@@ -27,8 +27,7 @@ def url_to_df(url,key=None):
 
 def prepare(players):
   players=players[['team','web_name','cost_change_event','now_cost']]
-  players.loc[:,'now_cost'] = players.loc[:,'now_cost'].astype(float)
-  players.loc[:, 'now_cost'] = (players.loc[:, 'now_cost'] / 10).astype(int)
+  players = players.assign(now_cost=players['now_cost'].astype(float) / 10)
   players=players[players['cost_change_event']!=0]
   players = players.rename(columns={'team': 'team_id'})
   players.loc[:,'team']=players['team_id'].map(short_name.iloc[0])

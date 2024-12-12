@@ -114,6 +114,7 @@ if __name__ == '__main__':
   players = pd.concat([first_condition, second_condition], axis=0, ignore_index=True)
   players = players.drop_duplicates()
   players=players[['chance_of_playing_next_round','team','full_name','news']]
+  players=players.astype({'chance_of_playing_next_round':'int'})
 
   injury_updates_db.delete_many({})
   for index,row in players.iterrows():

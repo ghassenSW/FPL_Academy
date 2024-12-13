@@ -7,8 +7,8 @@ import copy
 
 teams_names=['Arsenal', 'Aston Villa','Bournemouth','Brentford','Brighton & Hove Albion','Chelsea','Crystal Palace','Everton','Fulham','Ipswich Town','Leicester City','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Southampton','Tottenham Hotspur','West Ham United','Wolverhampton']
 
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 try:
   MONGODB_URI=os.getenv('MONGODB_URI')
 except Exception as e:
@@ -24,6 +24,7 @@ teams_stats_db=db['teams_stats']
 
 stats=list(teams_stats_db.find())
 num_gw=stats[-1]['GW']
+
 def filter_by_gw(data_type,start_gw,end_gw):
   stats=list(teams_stats_db.find())
   home_data=[]

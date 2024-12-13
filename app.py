@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
-from teams_stats import home_data,away_data,overall_data
+from teams_stats import num_gw,filter_by_gw
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
@@ -42,7 +42,7 @@ def login():
 
         if account:
             session['loggedin'] = True
-            session['id'] = str(account['_id'])  # MongoDB uses ObjectId
+            session['id'] = str(account['_id'])
             session['username'] = account['username']
             return redirect(url_for('index'))
         else:
@@ -79,6 +79,7 @@ def register():
             return render_template('login.html')
     return render_template('register.html', msg=msg)
 
+# price change
 @app.route("/price_change")
 def price_change():
     price_changed=price_change_db.find_one()
@@ -92,34 +93,18 @@ def price_change():
     day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
     return render_template("price_change.html",risers=risers,fallers=fallers,day=day)
 
+@app.route('/get-copy-price-change', methods=['GET'])
+def get_copy_price_change():
+    text_to_copy = get_price_change_text(price_change_db)
+    return jsonify({'text': text_to_copy})
+
+# injury updates
 @app.route("/injury_updates")
 def injury_updates():
     injuries=list(injury_updates_db.find())
     current_date=datetime.now()
     day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
     return render_template("injury_updates.html",injuries=injuries,day=day)
-
-@app.route("/teams_stats")
-def teams_stats():
-    return render_template("teams_stats.html")
-
-@app.route('/get_stats', methods=['POST'])
-def get_stats():
-    data=request.get_json()
-    data_type = data.get('data_type')
-    
-    if data_type=='overall':
-        return jsonify(overall_data)
-    if data_type == 'home':
-        return jsonify(home_data)
-    elif data_type == 'away':
-        return jsonify(away_data)
-    return jsonify([]) 
-
-@app.route('/get-copy-price-change', methods=['GET'])
-def get_copy_price_change():
-    text_to_copy = get_price_change_text(price_change_db)
-    return jsonify({'text': text_to_copy})
 
 @app.route('/get-copy-injury-updates', methods=['GET'])
 def get_copy_injury_updates():
@@ -132,6 +117,20 @@ def get_copy_injury_updates():
         return jsonify({'error': 'Injury not found'}), 404
     text_to_copy = get_injury_updates_text(injury)
     return jsonify({'text': text_to_copy})
+
+# teams stats
+@app.route("/teams_stats")
+def teams_stats():
+    return render_template("teams_stats.html",num_gw=num_gw)
+
+@app.route('/get_stats', methods=['POST'])
+def get_stats():
+    data=request.get_json()
+    start_gw = int(data.get('start_gw', 1))
+    end_gw = int(data.get('end_gw', num_gw))
+    data_type = data.get('data_type')
+    stats_data=filter_by_gw(data_type,start_gw,end_gw)
+    return jsonify(stats=stats_data,data_type=data_type,num_gw=num_gw)
 
 @app.route('/index')
 def index():

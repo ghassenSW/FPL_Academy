@@ -88,11 +88,10 @@ db = client['my_database']
 collection = db['fpl_data']
 price_change_db=db['price_change']
 
-teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
-short_name=dict(zip(teams['id'],teams['short_name']))
-short_name=pd.DataFrame(short_name,index=[0])
-
 if __name__ == '__main__':
+  teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
+  short_name=dict(zip(teams['id'],teams['short_name']))
+  short_name=pd.DataFrame(short_name,index=[0])
   fpl_data=collection.find_one()
   old_stats=pd.DataFrame(fpl_data['elements'])
   old=prepare(old_stats)

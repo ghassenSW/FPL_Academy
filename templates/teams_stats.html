@@ -28,13 +28,16 @@
         <table class="standings-table">
             <thead>
                 <tr>
-                    <th>Team</th>
-                    <th>Goals</th>
-                    <th>xG</th>
-                    <th>Shots</th>
-                    <th>SiB</th>
-                    <th>SoT</th>
-                    <th>BC</th>
+                    <th title="Team">Team</th>
+                    <th title="Matches Played">Played</th>
+                    <th title="Goals Scored">Goals</th>
+                    <th title="Expected Goals">xG</th>
+                    <th title="xG - G">Δ xG</th>
+                    <th title="Shots">Shots</th>
+                    <th title="Shots in Box">SiB</th>
+                    <th title="Shots on Target">SoT</th>
+                    <th title="Big Chances">BC</th>
+                    <th title="Failed To Score">FTS</th>
                 </tr>
             </thead>
             <tbody id="data-table">
@@ -53,12 +56,15 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${team.team}</td>
+                    <td>${team.games_played}</td>
                     <td>${team.goals}</td>
                     <td>${team.xg}</td>
+                    <td>${team.delta_xg}</td>
                     <td>${team.shots}</td>
                     <td>${team.sib}</td>
                     <td>${team.sot}</td>
                     <td>${team.bc}</td>
+                    <td>${team.failed_to_score}</td>
                 `;
                 tableBody.appendChild(row);
             });

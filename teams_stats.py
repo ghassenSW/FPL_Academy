@@ -27,8 +27,9 @@ num_gw=stats[-1]['GW']
 
 def filter_by_gw(data_type,start_gw,end_gw):
   stats=list(teams_stats_db.find())
-  home_data=[]
-  for team in teams_names:
+  if data_type=='home':
+    home_data=[]
+    for team in teams_names:
       team_data={}
       home=[i for i in stats if i['team H']==team]
       df=pd.DataFrame(home)
@@ -36,42 +37,63 @@ def filter_by_gw(data_type,start_gw,end_gw):
       df=df[df['GW']<=end_gw]
       df=df[['team H','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
       df.columns=['team','goals','xg','shots','sib','sot','bc']
+      df.loc[:,'failed_to_score'] = df['goals'] == 0
+      df.loc[:,'delta_xg']=df['xg']-df['goals']
+      games_played=len(df)
       sums=df.sum(numeric_only=True, axis=0)
       team_data['team']=team
+      team_data['games_played']=games_played
       [team_data.update({k:round(v,2)}) for k,v in sums.items()]
       home_data.append(team_data)
-      
-  away_data=[]
-  stats=list(teams_stats_db.find())
-  for team in teams_names:
+    return home_data
+
+  elif data_type=='away':
+    away_data=[]
+    for team in teams_names:
       team_data={}
-      home=[i for i in stats if i['team A']==team]
-      df=pd.DataFrame(home)
+      away=[i for i in stats if i['team A']==team]
+      df=pd.DataFrame(away)
       df=df[df['GW']>=start_gw]
       df=df[df['GW']<=end_gw]
       df=df[['team A','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
       df.columns=['team','goals','xg','shots','sib','sot','bc']
+      df.loc[:,'failed_to_score'] = df['goals'] == 0
+      df.loc[:,'delta_xg']=df['xg']-df['goals']
+      games_played=len(df)
       sums=df.sum(numeric_only=True, axis=0)
       team_data['team']=team
+      team_data['games_played']=games_played
       [team_data.update({k:round(v,2)}) for k,v in sums.items()]
       away_data.append(team_data)
+    return away_data
+  
+  elif data_type=='overall':
+    overall_data=[]
+    for team in teams_names:
+      team_data={}
+      home=[i for i in stats if i['team H']==team]
+      df_h=pd.DataFrame(home)
+      df_h=df_h[df_h['GW']>=start_gw]
+      df_h=df_h[df_h['GW']<=end_gw]
+      df_h=df_h[['team H','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
+      df_h.columns=['team','goals','xg','shots','sib','sot','bc']
+      df_h.loc[:,'failed_to_score'] = df_h['goals'] == 0
+      df_h.loc[:,'delta_xg']=df_h['xg']-df_h['goals']
 
-  overall_data=copy.deepcopy(home_data)
-  for team_data in overall_data:
-    for away_team in away_data:
-        if away_team['team']==team_data['team']:
-          team_data['goals']+=away_team['goals']
-          team_data['xg']+=away_team['xg']
-          team_data['xg']=round(team_data['xg'],2)
-          team_data['shots']+=away_team['shots']
-          team_data['sib']+=away_team['sib']
-          team_data['sot']+=away_team['sot']
-          team_data['bc']+=away_team['bc']
-  if data_type=='overall':
-     return overall_data
-  elif data_type=='home':
-     return home_data
-  elif data_type=='away':
-     return away_data
-          
+      away=[i for i in stats if i['team A']==team]
+      df_a=pd.DataFrame(away)
+      df_a=df_a[df_a['GW']>=start_gw]
+      df_a=df_a[df_a['GW']<=end_gw]
+      df_a=df_a[['team A','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
+      df_a.columns=['team','goals','xg','shots','sib','sot','bc']
+      df_a.loc[:,'failed_to_score'] = df_a['goals'] == 0
+      df_a.loc[:,'delta_xg']=df_a['xg']-df_a['goals']
+      df=pd.concat([df_h,df_a])
+      games_played=len(df)
 
+      sums=df.sum(numeric_only=True, axis=0)
+      team_data['team']=team
+      team_data['games_played']=games_played
+      [team_data.update({k:round(v,2)}) for k,v in sums.items()]
+      overall_data.append(team_data)
+    return overall_data  

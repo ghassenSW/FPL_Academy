@@ -3,7 +3,6 @@ import pandas as pd
 import os
 from pymongo import MongoClient
 from datetime import datetime
-import copy
 
 teams_names=['Arsenal', 'Aston Villa','Bournemouth','Brentford','Brighton & Hove Albion','Chelsea','Crystal Palace','Everton','Fulham','Ipswich Town','Leicester City','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Southampton','Tottenham Hotspur','West Ham United','Wolverhampton']
 
@@ -25,7 +24,7 @@ teams_stats_db=db['teams_stats']
 stats=list(teams_stats_db.find())
 num_gw=stats[-1]['GW']
 
-def filter_by_gw(data_type,start_gw,end_gw):
+def filter_by_gw(data_type,start_gw,end_gw,sort_by,sort_order):
   stats=list(teams_stats_db.find())
   if data_type=='home':
     home_data=[]
@@ -45,6 +44,7 @@ def filter_by_gw(data_type,start_gw,end_gw):
       team_data['games_played']=games_played
       [team_data.update({k:round(v,2)}) for k,v in sums.items()]
       home_data.append(team_data)
+    home_data=sorted(home_data,key=lambda x: x[sort_by],reverse=(sort_order=="desc"))
     return home_data
 
   elif data_type=='away':
@@ -65,6 +65,7 @@ def filter_by_gw(data_type,start_gw,end_gw):
       team_data['games_played']=games_played
       [team_data.update({k:round(v,2)}) for k,v in sums.items()]
       away_data.append(team_data)
+    away_data=sorted(away_data,key=lambda x: x[sort_by],reverse=(sort_order=="desc"))
     return away_data
   
   elif data_type=='overall':
@@ -77,7 +78,7 @@ def filter_by_gw(data_type,start_gw,end_gw):
       df_h=df_h[df_h['GW']<=end_gw]
       df_h=df_h[['team H','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
       df_h.columns=['team','goals','xg','shots','sib','sot','bc']
-      df_h.loc[:,'failed_to_score'] = df_h['goals'] == 0
+      df_h.loc[:,'failed_to_score'] = df_h['goals']==0
       df_h.loc[:,'delta_xg']=df_h['xg']-df_h['goals']
 
       away=[i for i in stats if i['team A']==team]
@@ -96,4 +97,6 @@ def filter_by_gw(data_type,start_gw,end_gw):
       team_data['games_played']=games_played
       [team_data.update({k:round(v,2)}) for k,v in sums.items()]
       overall_data.append(team_data)
-    return overall_data  
+      
+    overall_data=sorted(overall_data,key=lambda x: x[sort_by],reverse=(sort_order=="desc"))
+    return overall_data

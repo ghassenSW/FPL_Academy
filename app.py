@@ -128,8 +128,12 @@ def get_stats():
     data=request.get_json()
     start_gw = int(data.get('start_gw', 1))
     end_gw = int(data.get('end_gw', num_gw))
+
+    sort_by=data.get('sort_by','team')
+    sort_order=data.get('sort_order','desc')
+
     data_type = data.get('data_type')
-    stats_data=filter_by_gw(data_type,start_gw,end_gw)
+    stats_data=filter_by_gw(data_type,start_gw,end_gw,sort_by,sort_order)
     return jsonify(stats=stats_data,data_type=data_type,num_gw=num_gw)
 
 @app.route('/index')

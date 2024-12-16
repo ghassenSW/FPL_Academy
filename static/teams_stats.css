@@ -19,6 +19,10 @@ h1 {
     margin-bottom: 20px;
     color: #2e2e2e;
 }
+a {
+    text-decoration: none; /* Removes underline */
+    color: inherit; /* Keeps the text color unchanged */
+}
 
 /* Table Styling */
 .standings-table {
@@ -76,11 +80,13 @@ h1 {
 }
 
 .switch-btn.active {
-    background-color: #005bb5;
+    background-color: #b4e4ff;
 }
 
 .switch-btn:hover {
-    background-color: #005bb5;
+    background-color: #b4e4ff;
+    color: #0056b3; /* Dark blue text color on hover */
+
 }
 
 /* Game Week Selection Styling */

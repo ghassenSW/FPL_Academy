@@ -28,7 +28,6 @@ a {
     text-align: center;
     margin: 20px auto;
     padding: 15px 20px;
-    /* max-width: 800px; */
     background: linear-gradient(120deg,#1e8fff,#b834ff);
     border-radius: 12px;
     color: #ffffff; /* White text for contrast */

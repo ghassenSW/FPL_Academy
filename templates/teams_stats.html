@@ -29,45 +29,46 @@
                 <button id="apply-gw">Apply</button>
             </div>
         </div>
-        
-        <table class="standings-table">
-            <thead>
-                <tr>
-                    <th title="Team">
-                        <a href="#" data-sort-by="team" data-sort-order="desc">Team <span id="team"></span></a>
-                    </th>
-                    <th title="Matches Played">
-                        <a href="#" data-sort-by="games_played" data-sort-order="asc">Played <span id="games_played"></span></a>
-                    </th>
-                    <th title="Goals Scored">
-                        <a href="#" data-sort-by="goals" data-sort-order="asc">Goals <span id="goals"></span></a>
-                    </th>
-                    <th title="Expected Goals">
-                        <a href="#" data-sort-by="xg" data-sort-order="asc">xG <span id="xg"></span></a>
-                    </th>
-                    <th title="xG - G">
-                        <a href="#" data-sort-by="delta_xg" data-sort-order="asc">Δ xG <span id="delta_xg"></span></a>
-                    </th>
-                    <th title="Shots">
-                        <a href="#" data-sort-by="shots" data-sort-order="asc">Shots <span id="shots"></span></a>
-                    </th>
-                    <th title="Shots in Box">
-                        <a href="#" data-sort-by="sib" data-sort-order="asc">SiB <span id="sib"></span></a>
-                    </th>
-                    <th title="Shots on Target">
-                        <a href="#" data-sort-by="sot" data-sort-order="asc">SoT <span id="sot"></span></a>
-                    </th>
-                    <th title="Big Chances">
-                        <a href="#" data-sort-by="bc" data-sort-order="asc">BC <span id="bc"></span></a>
-                    </th>
-                    <th title="Failed To Score">
-                        <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">FTS <span id="failed_to_score"></span></a>
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="data-table">
-            </tbody>
-        </table>
+        <div class="table-wrapper">
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th title="Team">
+                            <a href="#" data-sort-by="team" data-sort-order="desc">Team <span id="team"></span></a>
+                        </th>
+                        <th title="Matches Played">
+                            <a href="#" data-sort-by="games_played" data-sort-order="asc">Played <span id="games_played"></span></a>
+                        </th>
+                        <th title="Goals Scored">
+                            <a href="#" data-sort-by="goals" data-sort-order="asc">Goals <span id="goals"></span></a>
+                        </th>
+                        <th title="Expected Goals">
+                            <a href="#" data-sort-by="xg" data-sort-order="asc">xG <span id="xg"></span></a>
+                        </th>
+                        <th title="xG - G">
+                            <a href="#" data-sort-by="delta_xg" data-sort-order="asc">Δ xG <span id="delta_xg"></span></a>
+                        </th>
+                        <th title="Shots">
+                            <a href="#" data-sort-by="shots" data-sort-order="asc">Shots <span id="shots"></span></a>
+                        </th>
+                        <th title="Shots in Box">
+                            <a href="#" data-sort-by="sib" data-sort-order="asc">SiB <span id="sib"></span></a>
+                        </th>
+                        <th title="Shots on Target">
+                            <a href="#" data-sort-by="sot" data-sort-order="asc">SoT <span id="sot"></span></a>
+                        </th>
+                        <th title="Big Chances">
+                            <a href="#" data-sort-by="bc" data-sort-order="asc">BC <span id="bc"></span></a>
+                        </th>
+                        <th title="Failed To Score">
+                            <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">FTS <span id="failed_to_score"></span></a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="data-table">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>

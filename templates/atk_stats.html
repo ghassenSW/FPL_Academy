@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier League Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='teams_stats.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="title-container">
+            <div>Premier League Attack Stats</div>
+            <div class="subtitle">Track your team's attack performance with updated stats</div>
+        </div>
+        <div class="page-header">
+            <div class="switch-container">
+                <button id="overall-btn" class="switch-btn selected">Overall</button>
+                <button id="home-btn" class="switch-btn">Home</button>
+                <button id="away-btn" class="switch-btn">Away</button>
+            </div>
+
+            <div class="gw-selection">
+                <label for="start-gw">Start GW:</label>
+                <input type="number" id="start-gw" min="1" max="{{ num_gw }}" value="1">
+                <label for="end-gw">End GW:</label>
+                <input type="number" id="end-gw" min="1" max="{{ num_gw }}" value="{{ num_gw }}">
+                <button id="apply-gw">Apply</button>
+            </div>
+        </div>
+        <div class="table-wrapper">
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th title="Team">
+                            <a href="#" data-sort-by="team" data-sort-order="desc">Team <span id="team"></span></a>
+                        </th>
+                        <th title="Matches Played">
+                            <a href="#" data-sort-by="games_played" data-sort-order="asc">Played <span id="games_played"></span></a>
+                        </th>
+                        <th title="Goals Scored">
+                            <a href="#" data-sort-by="goals" data-sort-order="asc">Goals <span id="goals"></span></a>
+                        </th>
+                        <th title="Expected Goals">
+                            <a href="#" data-sort-by="xg" data-sort-order="asc">xG <span id="xg"></span></a>
+                        </th>
+                        <th title="G -xG">
+                            <a href="#" data-sort-by="delta_xg" data-sort-order="asc">Δ xG <span id="delta_xg"></span></a>
+                        </th>
+                        <th title="Shots">
+                            <a href="#" data-sort-by="shots" data-sort-order="asc">Shots <span id="shots"></span></a>
+                        </th>
+                        <th title="Shots in Box">
+                            <a href="#" data-sort-by="sib" data-sort-order="asc">SiB <span id="sib"></span></a>
+                        </th>
+                        <th title="Shots on Target">
+                            <a href="#" data-sort-by="sot" data-sort-order="asc">SoT <span id="sot"></span></a>
+                        </th>
+                        <th title="Big Chances">
+                            <a href="#" data-sort-by="bc" data-sort-order="asc">BC <span id="bc"></span></a>
+                        </th>
+                        <th title="Failed To Score">
+                            <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">FTS <span id="failed_to_score"></span></a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="data-table">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let currentDataType = 'overall';
+        let num_gw;
+        let sortBy='team';
+        let sortOrder='asc';
+
+
+        $(document).ready(function() {
+            $('th a').click(function(event) {
+                var $this = $(this);
+                sortBy = $this.data('sort-by');
+                sortOrder = $this.data('sort-order');
+                sortOrder = (sortOrder === 'asc') ? 'desc' : 'asc';
+                $this.data('sort-order', sortOrder);
+                fetchAndSendStats(currentDataType);
+            });
+        });
+
+        function updateTable(data) {
+            const tableBody = document.getElementById('data-table');
+            tableBody.innerHTML = '';
+            data.forEach(function(team) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${team.team}</td>
+                    <td>${team.games_played}</td>
+                    <td title="Rank by Goals: ${team.goal_rank}">${team.goals}</td>
+                    <td title="Rank by xG: ${team.xg_rank}">${team.xg}</td>
+                    <td title="Rank by Δ xG: ${team.delta_xg_rank}">${team.delta_xg}</td>
+                    <td title="Rank by Shots: ${team.shots_rank}">${team.shots}</td>
+                    <td title="Rank by SiB: ${team.sib_rank}">${team.sib}</td>
+                    <td title="Rank by SoT: ${team.sot_rank}">${team.sot}</td>
+                    <td title="Rank by BC: ${team.bc_rank}">${team.bc}</td>
+                    <td title="Rank by FTS: ${team.fts_rank}">${team.failed_to_score}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            const spans = document.querySelectorAll('span');
+            spans.forEach(span => {
+                span.textContent = '';
+            });
+            const summarySpan = document.getElementById(sortBy);
+            var sort_icon = (sortOrder === 'desc') ? '▼' : '▲';
+            if (sortBy=='team'){
+                sort_icon = (sort_icon === '▲') ? '▼' : '▲';
+            }
+            summarySpan.textContent = sort_icon;
+        }
+        function fetchAndSendStats(dataType) {
+            const startGw = $('#start-gw').val();
+            const endGw = $('#end-gw').val();
+
+            $.ajax({
+                url: '/get_stats',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    data_type: dataType,
+                    start_gw: startGw,
+                    end_gw: endGw,
+                    sort_by:sortBy,
+                    sort_order:sortOrder,
+                    stats_type:'atk'
+                }),
+                success: function(response) {
+                    updateTable(response['stats']);
+                    num_gw=response['num_gw']
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            fetchAndSendStats(currentDataType);
+        });
+        $('#apply-gw').click(function() {
+            fetchAndSendStats(currentDataType);
+        })
+        $('#overall-btn').click(function() {
+            currentDataType = 'overall';
+            fetchAndSendStats(currentDataType);
+        })
+        $('#home-btn').click(function() {
+            currentDataType = 'home';
+            fetchAndSendStats(currentDataType);
+        })
+        $('#away-btn').click(function() {
+            currentDataType = 'away';
+            fetchAndSendStats(currentDataType);
+        })
+
+        // gw selection
+        $(document).ready(function () {
+            $('.switch-btn').on('click', function () {
+                $('.switch-btn').removeClass('selected');
+                $(this).addClass('selected');
+            });
+
+            $('#start-gw').on('input', function () {
+                const startGw = parseInt($(this).val());
+                const endGw = parseInt($('#end-gw').val());
+                if (startGw <1){
+                    $(this).val(1);
+                }
+                else if (startGw >num_gw)
+                {
+                    $(this).val(num_gw);
+                }
+                if (startGw > endGw) {
+                    $(this).val(endGw);
+                }
+            });
+
+            $('#end-gw').on('input', function () {
+                const startGw = parseInt($('#start-gw').val());
+                const endGw = parseInt($(this).val());
+                if (endGw <1){
+                    $(this).val(1);
+                }
+                else if (endGw >num_gw)
+                {
+                    $(this).val(num_gw);
+                }
+                if (endGw < startGw) {
+                    $(this).val(startGw);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -11,8 +11,8 @@
 <body>
     <div class="container">
         <div class="title-container">
-            <div>Premier League Stats</div>
-            <div class="subtitle">Track your team's performance with updated stats</div>
+            <div>Premier League Defence Stats</div>
+            <div class="subtitle">Track your team's defence performance with updated stats</div>
         </div>
         <div class="page-header">
             <div class="switch-container">
@@ -39,29 +39,29 @@
                         <th title="Matches Played">
                             <a href="#" data-sort-by="games_played" data-sort-order="asc">Played <span id="games_played"></span></a>
                         </th>
-                        <th title="Goals Scored">
-                            <a href="#" data-sort-by="goals" data-sort-order="asc">Goals <span id="goals"></span></a>
+                        <th title="Clean Sheets">
+                            <a href="#" data-sort-by="cs" data-sort-order="asc">CS<span id="cs"></span></a>
                         </th>
-                        <th title="Expected Goals">
-                            <a href="#" data-sort-by="xg" data-sort-order="asc">xG <span id="xg"></span></a>
+                        <th title="Goals Conceded">
+                            <a href="#" data-sort-by="goalsc" data-sort-order="asc">GC <span id="goalsc"></span></a>
                         </th>
-                        <th title="xG - G">
-                            <a href="#" data-sort-by="delta_xg" data-sort-order="asc">Δ xG <span id="delta_xg"></span></a>
+                        <th title="Expected Goals Conceded">
+                            <a href="#" data-sort-by="xgc" data-sort-order="asc">xGC <span id="xgc"></span></a>
                         </th>
-                        <th title="Shots">
-                            <a href="#" data-sort-by="shots" data-sort-order="asc">Shots <span id="shots"></span></a>
+                        <th title="GC -xGC">
+                            <a href="#" data-sort-by="delta_xgc" data-sort-order="asc">Δ xGC <span id="delta_xgc"></span></a>
                         </th>
-                        <th title="Shots in Box">
-                            <a href="#" data-sort-by="sib" data-sort-order="asc">SiB <span id="sib"></span></a>
+                        <th title="Shots Conceded">
+                            <a href="#" data-sort-by="shotsc" data-sort-order="asc">Shots Conc<span id="shotsc"></span></a>
                         </th>
-                        <th title="Shots on Target">
-                            <a href="#" data-sort-by="sot" data-sort-order="asc">SoT <span id="sot"></span></a>
+                        <th title="Shots in Box Conceded">
+                            <a href="#" data-sort-by="sibc" data-sort-order="asc">SiB Conc<span id="sibc"></span></a>
                         </th>
-                        <th title="Big Chances">
-                            <a href="#" data-sort-by="bc" data-sort-order="asc">BC <span id="bc"></span></a>
+                        <th title="Shots on Target Conceded">
+                            <a href="#" data-sort-by="sotc" data-sort-order="asc">SoT Conc<span id="sotc"></span></a>
                         </th>
-                        <th title="Failed To Score">
-                            <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">FTS <span id="failed_to_score"></span></a>
+                        <th title="Big Chances Conceded">
+                            <a href="#" data-sort-by="bcc" data-sort-order="asc">BC Conc<span id="bcc"></span></a>
                         </th>
                     </tr>
                 </thead>
@@ -97,14 +97,14 @@
                 row.innerHTML = `
                     <td>${team.team}</td>
                     <td>${team.games_played}</td>
-                    <td>${team.goals}</td>
-                    <td>${team.xg}</td>
-                    <td>${team.delta_xg}</td>
-                    <td>${team.shots}</td>
-                    <td>${team.sib}</td>
-                    <td>${team.sot}</td>
-                    <td>${team.bc}</td>
-                    <td>${team.failed_to_score}</td>
+                    <td title="Rank by Goals: ${team.cs_rank}">${team.cs}</td>
+                    <td title="Rank by xG: ${team.goalsc_rank}">${team.goalsc}</td>
+                    <td title="Rank by xG: ${team.xgc_rank}">${team.xgc}</td>
+                    <td title="Rank by Δ xG: ${team.delta_xgc_rank}">${team.delta_xgc}</td>
+                    <td title="Rank by Shots: ${team.shotsc_rank}">${team.shotsc}</td>
+                    <td title="Rank by SiB: ${team.sibc_rank}">${team.sibc}</td>
+                    <td title="Rank by SoT: ${team.sotc_rank}">${team.sotc}</td>
+                    <td title="Rank by BC: ${team.bcc_rank}">${team.bcc}</td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -132,7 +132,8 @@
                     start_gw: startGw,
                     end_gw: endGw,
                     sort_by:sortBy,
-                    sort_order:sortOrder
+                    sort_order:sortOrder,
+                    stats_type:'def'
                 }),
                 success: function(response) {
                     updateTable(response['stats']);

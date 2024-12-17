@@ -123,21 +123,25 @@ def get_copy_injury_updates():
     return jsonify({'text': text_to_copy})
 
 # teams stats
-@app.route("/teams_stats")
-def teams_stats():
-    return render_template("teams_stats.html",num_gw=num_gw)
+@app.route("/atk_stats")
+def atk_stats():
+    return render_template("atk_stats.html",num_gw=num_gw)
+
+@app.route("/def_stats")
+def def_stats():
+    return render_template("def_stats.html",num_gw=num_gw)
 
 @app.route('/get_stats', methods=['POST'])
 def get_stats():
     data=request.get_json()
     start_gw = int(data.get('start_gw', 1))
     end_gw = int(data.get('end_gw', num_gw))
-
+    stats_type=data.get('stats_type','atk')
     sort_by=data.get('sort_by','team')
     sort_order=data.get('sort_order','desc')
 
     data_type = data.get('data_type')
-    stats_data=filter_by_gw(data_type,start_gw,end_gw,sort_by,sort_order)
+    stats_data=filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order)
     return jsonify(stats=stats_data,data_type=data_type,num_gw=num_gw)
 
 @app.route('/index')

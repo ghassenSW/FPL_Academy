@@ -12,11 +12,15 @@ app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
 CORS(app)
 
-# from dotenv import load_dotenv
-# load_dotenv()
-# MONGODB_URI=os.getenv('MONGODB_URI')
-
-MONGODB_URI=os.environ.get('MONGODB_URI')
+try:
+  from dotenv import load_dotenv
+  load_dotenv()
+  MONGODB_URI=os.getenv('MONGODB_URI')
+except Exception as e:
+  try:
+    MONGODB_URI=os.environ.get('MONGODB_URI')
+  except Exception as e2:
+    print(e2)
 
 client = MongoClient(MONGODB_URI)
 db = client['my_database']

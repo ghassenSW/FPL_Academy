@@ -76,9 +76,9 @@ def update_mongo_data():
     collection.insert_one(new_data)
     print("MongoDB data overwritten successfully with new fpl data.")
 
-# from dotenv import load_dotenv
-# load_dotenv()
 try:
+  from dotenv import load_dotenv
+  load_dotenv()
   MONGODB_URI=os.getenv('MONGODB_URI')
 except Exception as e:
   try:

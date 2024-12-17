@@ -6,9 +6,10 @@ from datetime import datetime
 
 teams_names=['Arsenal', 'Aston Villa','Bournemouth','Brentford','Brighton & Hove Albion','Chelsea','Crystal Palace','Everton','Fulham','Ipswich Town','Leicester City','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Southampton','Tottenham Hotspur','West Ham United','Wolverhampton']
 
-# from dotenv import load_dotenv
-# load_dotenv()
+
 try:
+  from dotenv import load_dotenv
+  load_dotenv()
   MONGODB_URI=os.getenv('MONGODB_URI')
 except Exception as e:
   try:

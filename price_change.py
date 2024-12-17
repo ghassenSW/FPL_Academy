@@ -73,9 +73,9 @@ def get_price_change_text(price_change_db):
     text=df_to_text(df)
     return text
 
-# from dotenv import load_dotenv
-# load_dotenv()
 try:
+  from dotenv import load_dotenv
+  load_dotenv()
   MONGODB_URI=os.getenv('MONGODB_URI')
 except Exception as e:
   try:

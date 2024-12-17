@@ -28,8 +28,8 @@ a {
     text-align: center;
     margin: 20px auto;
     padding: 15px 20px;
-    max-width: 600px;
-    background: linear-gradient(20deg,#266fee,#902ff7);
+    /* max-width: 800px; */
+    background: linear-gradient(120deg,#1e8fff,#b834ff);
     border-radius: 12px;
     color: #ffffff; /* White text for contrast */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -123,7 +123,7 @@ input[type="number"] {
 }
 
 input[type="number"]:focus {
-    border-color: #4c91f7; /* Matches the blue tones */
+    border-color: #4c91f7;
     box-shadow: 0 0 8px rgba(76, 145, 247, 0.5);
 }
 

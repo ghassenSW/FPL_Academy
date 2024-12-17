@@ -1,28 +1,171 @@
-/* General Reset */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
     color: #333;
 }
-
-/* Container Styling */
 .container {
     width: 90%;
     margin: 20px auto;
     max-width: 1200px;
     text-align: center;
 }
-
-/* Table Title */
-h1 {
-    margin-bottom: 20px;
-    color: #2e2e2e;
-}
 a {
-    text-decoration: none; /* Removes underline */
-    color: inherit; /* Keeps the text color unchanged */
+    text-decoration: none;
+    color: inherit;
 }
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Title Container */
+.title-container {
+    text-align: center;
+    margin: 20px auto;
+    padding: 15px 20px;
+    max-width: 600px;
+    background: linear-gradient(20deg,#266fee,#902ff7);
+    border-radius: 12px;
+    color: #ffffff; /* White text for contrast */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Subtitle Style (Optional) */
+.subtitle {
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: 300;
+    color: #d1e3ff; /* Lighter blue text */
+}
+
+/* Switch Container - upper left */
+.switch-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    border: 1px solid #d1d9e6;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    width: 350px;
+    box-sizing: border-box;
+    margin: 0; 
+}
+
+
+
+
+.switch-btn {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    background: #159cfc;
+    color: #ffffff;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.switch-btn:hover {
+    background: #0071d4;
+    color:rgb(255, 255, 255);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+}
+.switch-btn.selected {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border: 2px solid #6a11cb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px); 
+}
+/* GW Selection - upper right */
+.gw-selection {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    border: 1px solid #d1d9e6;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    width: 450px; /* Set consistent width */
+    box-sizing: border-box;
+    margin: 0; /* Remove default margin */
+}
+
+/* Labels */
+label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #444; /* Dark gray */
+    margin-right: 5px;
+}
+
+/* Input fields */
+input[type="number"] {
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #333;
+    border: 2px solid #d1d9e6;
+    border-radius: 8px;
+    width: 40px;
+    background-color: #ffffff;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input[type="number"]:focus {
+    border-color: #4c91f7; /* Matches the blue tones */
+    box-shadow: 0 0 8px rgba(76, 145, 247, 0.5);
+}
+
+/* Apply Button */
+button#apply-gw {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    background: #159cfc;
+    color: #ffffff;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+button#apply-gw:hover {
+    background: linear-gradient(135deg, #2a7df5, #205cb8); /* Slightly darker on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+button#apply-gw:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+@media (max-width: 600px) {
+    .gw-selection {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    input[type="number"], button#apply-gw {
+        width: 100%;
+    }
+}
+
+
+
+
+
 
 /* Table Styling */
 .standings-table {
@@ -60,92 +203,27 @@ a {
 .standings-table tbody td {
     font-size: 13px;
 }
-/* Switch Buttons Styling */
-.switch-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-}
-
-.switch-btn {
-    padding: 8px 16px;
-    background-color: #0073e6;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.switch-btn.active {
-    background-color: #b4e4ff;
-}
-
-.switch-btn:hover {
-    background-color: #b4e4ff;
-    color: #0056b3; /* Dark blue text color on hover */
-
-}
-
-/* Game Week Selection Styling */
-.gw-selection {
-    display: flex;
-    justify-content: flex-start;
-    gap: 15px;
-    margin-bottom: 20px;
-    align-items: center;
-}
-
-.gw-selection label {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.gw-selection input {
-    padding: 5px 10px;
-    font-size: 14px;
-    width: 50px;
-}
-
-.gw-selection button {
-    padding: 5px 15px;
-    background-color: #0073e6;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.gw-selection button:hover {
-    background-color: #005bb5;
-}
-
 th:hover {
-    background-color: #d4eefd; /* Light blue hover effect */
-    color: #0056b3; /* Dark blue text color on hover */
+    background-color: #d4eefd; 
+    color: #0056b3; 
 }
-
 th:hover::after {
-    content: attr(title); /* Use the title attribute as the tooltip text */
+    content: attr(title);
     position: absolute;
-    bottom: 100%; /* Position above the header */
+    bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333; /* Dark background for the tooltip */
-    color: #fff; /* White text for the tooltip */
+    background-color: #333;
+    color: #fff; 
     padding: 5px 10px;
     border-radius: 5px;
-    white-space: nowrap; /* Prevents wrapping */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    white-space: nowrap; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 12px;
-    pointer-events: none; /* Prevents interaction with the tooltip */
+    pointer-events: none; 
     opacity: 0;
     transition: opacity 0.2s ease;
 }
-
 th:hover::after {
-    opacity: 1; /* Show tooltip on hover */
+    opacity: 1;
 }

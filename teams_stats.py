@@ -37,7 +37,7 @@ def filter_by_gw(data_type,start_gw,end_gw,sort_by,sort_order):
       df=df[['team H','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
       df.columns=['team','goals','xg','shots','sib','sot','bc']
       df.loc[:,'failed_to_score'] = df['goals'] == 0
-      df.loc[:,'delta_xg']=df['xg']-df['goals']
+      df.loc[:,'delta_xg']=df['goals']-df['xg']
       games_played=len(df)
       sums=df.sum(numeric_only=True, axis=0)
       team_data['team']=team
@@ -58,7 +58,7 @@ def filter_by_gw(data_type,start_gw,end_gw,sort_by,sort_order):
       df=df[['team A','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
       df.columns=['team','goals','xg','shots','sib','sot','bc']
       df.loc[:,'failed_to_score'] = df['goals'] == 0
-      df.loc[:,'delta_xg']=df['xg']-df['goals']
+      df.loc[:,'delta_xg']=df['goals']-df['xg']
       games_played=len(df)
       sums=df.sum(numeric_only=True, axis=0)
       team_data['team']=team
@@ -79,7 +79,7 @@ def filter_by_gw(data_type,start_gw,end_gw,sort_by,sort_order):
       df_h=df_h[['team H','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
       df_h.columns=['team','goals','xg','shots','sib','sot','bc']
       df_h.loc[:,'failed_to_score'] = df_h['goals']==0
-      df_h.loc[:,'delta_xg']=df_h['xg']-df_h['goals']
+      df_h.loc[:,'delta_xg']=df_h['goals']-df_h['xg']
 
       away=[i for i in stats if i['team A']==team]
       df_a=pd.DataFrame(away)
@@ -88,7 +88,7 @@ def filter_by_gw(data_type,start_gw,end_gw,sort_by,sort_order):
       df_a=df_a[['team A','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
       df_a.columns=['team','goals','xg','shots','sib','sot','bc']
       df_a.loc[:,'failed_to_score'] = df_a['goals'] == 0
-      df_a.loc[:,'delta_xg']=df_a['xg']-df_a['goals']
+      df_a.loc[:,'delta_xg']=df_a['goals']-df_a['xg']
       df=pd.concat([df_h,df_a])
       games_played=len(df)
 

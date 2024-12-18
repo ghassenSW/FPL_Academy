@@ -118,7 +118,7 @@
             });
             const summarySpan = document.getElementById(sortBy);
             var sort_icon = (sortOrder === 'desc') ? '▼' : '▲';
-            if ((sortBy=='team')||(sortBy=='cs')){
+            if (sortBy=='cs'){
                 sort_icon = (sort_icon === '▲') ? '▼' : '▲';
             }
             summarySpan.textContent = sort_icon;

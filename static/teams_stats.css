@@ -170,7 +170,6 @@ button#apply-gw:active {
 
 
 
-
 /* Wrapper to handle overflow */
 .table-wrapper {
     overflow-x: auto;  /* Make the table horizontally scrollable */
@@ -194,14 +193,21 @@ button#apply-gw:active {
 
 .standings-table th, 
 .standings-table td {
-    padding: 12px 15px;
+    padding: 12px 5px;
     text-align: center;
     border: 1px solid #ddd;
+}
+
+/* Make data inside the table bold */
+.standings-table td {
+    font-size: 13px;
+    font-weight: bold; /* Bold style for table data */
 }
 
 .standings-table th {
     font-size: 14px;
     letter-spacing: 1px;
+    font-weight: bold; /* Optional: Bold style for table headers */
 }
 
 .standings-table tbody tr:nth-child(even) {
@@ -210,10 +216,6 @@ button#apply-gw:active {
 
 .standings-table tbody tr:hover {
     background-color: #d1e7ff;
-}
-
-.standings-table tbody td {
-    font-size: 13px;
 }
 
 /* Fix column width */
@@ -248,4 +250,23 @@ th:hover::after {
 
 th:hover::after {
     opacity: 1;
+}
+
+.standings-table th.fixed-column {    
+    position: sticky;
+    left: 0; 
+    background-color: #0073e6;
+    z-index: 2; 
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.standings-table td.fixed-column {
+    position: sticky;
+    left: 0; 
+    background-color: #ffffff;
+    z-index: 2; 
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.standings-table thead th.fixed-column {
+    z-index: 3;
 }

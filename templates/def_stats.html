@@ -33,7 +33,7 @@
             <table class="standings-table">
                 <thead>
                     <tr>
-                        <th title="Team">
+                        <th title="Team" class="fixed-column">
                             <a href="#" data-sort-by="team" data-sort-order="asc">Team <span id="team"></span></a>
                         </th>
                         <th title="Matches Played">
@@ -95,7 +95,7 @@
             data.forEach(function(team) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${team.team}</td>
+                    <td class="fixed-column">${team.team}</td>
                     <td>${team.games_played}</td>
                     <td title="Rank by CS: ${team.cs_rank}">${team.cs}</td>
                     <td title="Rank by GC: ${team.goalc_rank}">${team.goalsc}</td>
@@ -114,7 +114,7 @@
             });
             const summarySpan = document.getElementById(sortBy);
             var sort_icon = (sortOrder === 'desc') ? '▼' : '▲';
-            if (sortBy=='team'){
+            if ((sortBy=='team')||(sortBy=='cs')){
                 sort_icon = (sort_icon === '▲') ? '▼' : '▲';
             }
             summarySpan.textContent = sort_icon;

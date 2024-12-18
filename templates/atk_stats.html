@@ -89,6 +89,12 @@
             });
         });
 
+        function calculateColor(value) {
+                const normalized = (value - 1) / (20 - 1); // Normalize between 0 and 1
+                const blue = Math.round(255 * (1-normalized)); // Darker blue for higher values
+                return `rgb(${255 - blue}, ${255 - blue}, 255)`; // Blue and white gradient
+        }
+
         function updateTable(data) {
             const tableBody = document.getElementById('data-table');
             tableBody.innerHTML = '';
@@ -97,14 +103,14 @@
                 row.innerHTML = `
                     <td class="fixed-column">${team.team}</td>
                     <td>${team.games_played}</td>
-                    <td title="Rank by Goals: ${team.goal_rank}">${team.goals}</td>
-                    <td title="Rank by xG: ${team.xg_rank}">${team.xg}</td>
-                    <td title="Rank by Δ xG: ${team.delta_xg_rank}">${team.delta_xg}</td>
-                    <td title="Rank by Shots: ${team.shots_rank}">${team.shots}</td>
-                    <td title="Rank by SiB: ${team.sib_rank}">${team.sib}</td>
-                    <td title="Rank by SoT: ${team.sot_rank}">${team.sot}</td>
-                    <td title="Rank by BC: ${team.bc_rank}">${team.bc}</td>
-                    <td title="Rank by FTS: ${team.fts_rank}">${team.failed_to_score}</td>
+                    <td title="Rank by Goals: ${team.goal_rank}" style="background-color: ${calculateColor(team.goal_rank)}">${team.goals}</td>
+                    <td title="Rank by xG: ${team.xg_rank}" style="background-color: ${calculateColor(team.xg_rank)}">${team.xg}</td>
+                    <td title="Rank by Δ xG: ${team.delta_xg_rank}" style="background-color: ${calculateColor(team.delta_xg_rank)}">${team.delta_xg}</td>
+                    <td title="Rank by Shots: ${team.shots_rank}" style="background-color: ${calculateColor(team.shots_rank)}">${team.shots}</td>
+                    <td title="Rank by SiB: ${team.sib_rank}" style="background-color: ${calculateColor(team.sib_rank)}">${team.sib}</td>
+                    <td title="Rank by SoT: ${team.sot_rank}" style="background-color: ${calculateColor(team.sot_rank)}">${team.sot}</td>
+                    <td title="Rank by BC: ${team.bc_rank}" style="background-color: ${calculateColor(team.bc_rank)}">${team.bc}</td>
+                    <td title="Rank by FTS: ${team.fts_rank}" style="background-color: ${calculateColor(team.fts_rank)}">${team.failed_to_score}</td>
                 `;
                 tableBody.appendChild(row);
             });

@@ -95,10 +95,10 @@ teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams
 teams_short_names=dict(zip(teams['name'],teams['short_name']))
 my_map=dict(zip(teams['id'],teams['name']))
 my_map=pd.DataFrame(my_map,index=[0])
-num_gameweek=get_num_gw()
 
 
 if __name__ == '__main__':
+  num_gameweek=get_num_gw()
   fpl_data=collection.find_one()
   old_stats=pd.DataFrame(fpl_data['elements'])
   new_stats=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')

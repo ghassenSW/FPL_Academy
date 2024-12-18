@@ -177,23 +177,23 @@ def filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order):
         home_data.append(team_data)
       df=pd.DataFrame(home_data)
       for team_data in home_data:
-        cs_rank=df['cs'].rank(ascending=False, method='min')
+        cs_rank=df['cs'].rank(ascending=True, method='min')
         team_data['cs_rank'] =cs_rank[df['cs'] == team_data['cs']].iloc[0]
-        goalc_rank=df['goalsc'].rank(ascending=False, method='min')
+        goalc_rank=df['goalsc'].rank(ascending=True, method='min')
         team_data['goalc_rank'] =goalc_rank[df['goalsc'] == team_data['goalsc']].iloc[0]
-        xgc_rank=df['xgc'].rank(ascending=False, method='min')
+        xgc_rank=df['xgc'].rank(ascending=True, method='min')
         team_data['xgc_rank'] =xgc_rank[df['xgc'] == team_data['xgc']].iloc[0]
-        delta_xgc_rank=df['delta_xgc'].rank(ascending=False, method='min')
+        delta_xgc_rank=df['delta_xgc'].rank(ascending=True, method='min')
         team_data['delta_xgc_rank'] =delta_xgc_rank[df['delta_xgc'] == team_data['delta_xgc']].iloc[0]
-        shotsc_rank=df['shotsc'].rank(ascending=False, method='min')
+        shotsc_rank=df['shotsc'].rank(ascending=True, method='min')
         team_data['shotsc_rank'] =shotsc_rank[df['shotsc'] == team_data['shotsc']].iloc[0]
-        sibc_rank=df['sibc'].rank(ascending=False, method='min')
+        sibc_rank=df['sibc'].rank(ascending=True, method='min')
         team_data['sibc_rank'] =sibc_rank[df['sibc'] == team_data['sibc']].iloc[0]
-        sotc_rank=df['sotc'].rank(ascending=False, method='min')
+        sotc_rank=df['sotc'].rank(ascending=True, method='min')
         team_data['sotc_rank'] =sotc_rank[df['sotc'] == team_data['sotc']].iloc[0]
-        bcc_rank=df['bcc'].rank(ascending=False, method='min')
+        bcc_rank=df['bcc'].rank(ascending=True, method='min')
         team_data['bcc_rank'] =bcc_rank[df['bcc'] == team_data['bcc']].iloc[0]
-      home_data=sorted(home_data,key=lambda x: x[sort_by],reverse=(sort_order=="desc"))
+      home_data=sorted(home_data,key=lambda x: x[sort_by],reverse=(sort_order=="asc"))
       return home_data
 
     elif data_type=='away':
@@ -216,23 +216,23 @@ def filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order):
         away_data.append(team_data)
       df=pd.DataFrame(away_data)
       for team_data in away_data:
-        cs_rank=df['cs'].rank(ascending=False, method='min')
+        cs_rank=df['cs'].rank(ascending=True, method='min')
         team_data['cs_rank'] =cs_rank[df['cs'] == team_data['cs']].iloc[0]
-        goalc_rank=df['goalsc'].rank(ascending=False, method='min')
+        goalc_rank=df['goalsc'].rank(ascending=True, method='min')
         team_data['goalc_rank'] =goalc_rank[df['goalsc'] == team_data['goalsc']].iloc[0]
-        xgc_rank=df['xgc'].rank(ascending=False, method='min')
+        xgc_rank=df['xgc'].rank(ascending=True, method='min')
         team_data['xgc_rank'] =xgc_rank[df['xgc'] == team_data['xgc']].iloc[0]
-        delta_xgc_rank=df['delta_xgc'].rank(ascending=False, method='min')
+        delta_xgc_rank=df['delta_xgc'].rank(ascending=True, method='min')
         team_data['delta_xgc_rank'] =delta_xgc_rank[df['delta_xgc'] == team_data['delta_xgc']].iloc[0]
-        shotsc_rank=df['shotsc'].rank(ascending=False, method='min')
+        shotsc_rank=df['shotsc'].rank(ascending=True, method='min')
         team_data['shotsc_rank'] =shotsc_rank[df['shotsc'] == team_data['shotsc']].iloc[0]
-        sibc_rank=df['sibc'].rank(ascending=False, method='min')
+        sibc_rank=df['sibc'].rank(ascending=True, method='min')
         team_data['sibc_rank'] =sibc_rank[df['sibc'] == team_data['sibc']].iloc[0]
-        sotc_rank=df['sotc'].rank(ascending=False, method='min')
+        sotc_rank=df['sotc'].rank(ascending=True, method='min')
         team_data['sotc_rank'] =sotc_rank[df['sotc'] == team_data['sotc']].iloc[0]
-        bcc_rank=df['bcc'].rank(ascending=False, method='min')
+        bcc_rank=df['bcc'].rank(ascending=True, method='min')
         team_data['bcc_rank'] =bcc_rank[df['bcc'] == team_data['bcc']].iloc[0]
-      away_data=sorted(away_data,key=lambda x: x[sort_by],reverse=(sort_order=="desc"))
+      away_data=sorted(away_data,key=lambda x: x[sort_by],reverse=(sort_order=="asc"))
       return away_data
     
     elif data_type=='overall':
@@ -267,21 +267,21 @@ def filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order):
 
       df=pd.DataFrame(overall_data)
       for team_data in overall_data:
-        cs_rank=df['cs'].rank(ascending=False, method='min')
+        cs_rank=df['cs'].rank(ascending=True, method='min')
         team_data['cs_rank'] =cs_rank[df['cs'] == team_data['cs']].iloc[0]
-        goalc_rank=df['goalsc'].rank(ascending=False, method='min')
+        goalc_rank=df['goalsc'].rank(ascending=True, method='min')
         team_data['goalc_rank'] =goalc_rank[df['goalsc'] == team_data['goalsc']].iloc[0]
-        xgc_rank=df['xgc'].rank(ascending=False, method='min')
+        xgc_rank=df['xgc'].rank(ascending=True, method='min')
         team_data['xgc_rank'] =xgc_rank[df['xgc'] == team_data['xgc']].iloc[0]
-        delta_xgc_rank=df['delta_xgc'].rank(ascending=False, method='min')
+        delta_xgc_rank=df['delta_xgc'].rank(ascending=True, method='min')
         team_data['delta_xgc_rank'] =delta_xgc_rank[df['delta_xgc'] == team_data['delta_xgc']].iloc[0]
-        shotsc_rank=df['shotsc'].rank(ascending=False, method='min')
+        shotsc_rank=df['shotsc'].rank(ascending=True, method='min')
         team_data['shotsc_rank'] =shotsc_rank[df['shotsc'] == team_data['shotsc']].iloc[0]
-        sibc_rank=df['sibc'].rank(ascending=False, method='min')
+        sibc_rank=df['sibc'].rank(ascending=True, method='min')
         team_data['sibc_rank'] =sibc_rank[df['sibc'] == team_data['sibc']].iloc[0]
-        sotc_rank=df['sotc'].rank(ascending=False, method='min')
+        sotc_rank=df['sotc'].rank(ascending=True, method='min')
         team_data['sotc_rank'] =sotc_rank[df['sotc'] == team_data['sotc']].iloc[0]
-        bcc_rank=df['bcc'].rank(ascending=False, method='min')
+        bcc_rank=df['bcc'].rank(ascending=True, method='min')
         team_data['bcc_rank'] =bcc_rank[df['bcc'] == team_data['bcc']].iloc[0]
-      overall_data=sorted(overall_data,key=lambda x: x[sort_by],reverse=(sort_order=="desc"))
+      overall_data=sorted(overall_data,key=lambda x: x[sort_by],reverse=(sort_order=="asc"))
       return overall_data

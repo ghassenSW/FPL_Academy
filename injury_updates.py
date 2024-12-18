@@ -26,6 +26,9 @@ def url_to_df(url,key=None):
       print(f"Error: {response.status_code}")
 
 def get_num_gw():
+    teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
+    my_map=dict(zip(teams['id'],teams['name']))
+    my_map=pd.DataFrame(my_map,index=[0])
     present_fixtures=url_to_df('https://fantasy.premierleague.com/api/fixtures/?future=1')
     num_gw=present_fixtures['event'].min()
     fixtures=url_to_df('https://fantasy.premierleague.com/api/fixtures')
@@ -46,6 +49,10 @@ def condition(row):
 
 def df_to_text(players):
     gw=get_num_gw()
+    teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
+    teams_short_names=dict(zip(teams['name'],teams['short_name']))
+    my_map=dict(zip(teams['id'],teams['name']))
+    my_map=pd.DataFrame(my_map,index=[0])
     tweet_text='🚨 Injury Updates\n\n'
     match_tag=f'#GW{gw} #FPL #FPL_InjuryUpdates'
     for index,row in players.iterrows():
@@ -91,10 +98,7 @@ db = client['my_database']
 collection = db['fpl_data']
 injury_updates_db=db['injuries']
 
-teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
-teams_short_names=dict(zip(teams['name'],teams['short_name']))
-my_map=dict(zip(teams['id'],teams['name']))
-my_map=pd.DataFrame(my_map,index=[0])
+
 
 
 if __name__ == '__main__':

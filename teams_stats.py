@@ -179,7 +179,7 @@ def filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order):
       for team_data in home_data:
         cs_rank=df['cs'].rank(ascending=True, method='min')
         team_data['cs_rank'] =cs_rank[df['cs'] == team_data['cs']].iloc[0]
-        goalc_rank=df['goalsc'].rank(ascending=True, method='min')
+        goalc_rank=df['goalsc'].rank(ascending=False, method='min')
         team_data['goalc_rank'] =goalc_rank[df['goalsc'] == team_data['goalsc']].iloc[0]
         xgc_rank=df['xgc'].rank(ascending=True, method='min')
         team_data['xgc_rank'] =xgc_rank[df['xgc'] == team_data['xgc']].iloc[0]
@@ -218,7 +218,7 @@ def filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order):
       for team_data in away_data:
         cs_rank=df['cs'].rank(ascending=True, method='min')
         team_data['cs_rank'] =cs_rank[df['cs'] == team_data['cs']].iloc[0]
-        goalc_rank=df['goalsc'].rank(ascending=True, method='min')
+        goalc_rank=df['goalsc'].rank(ascending=False, method='min')
         team_data['goalc_rank'] =goalc_rank[df['goalsc'] == team_data['goalsc']].iloc[0]
         xgc_rank=df['xgc'].rank(ascending=True, method='min')
         team_data['xgc_rank'] =xgc_rank[df['xgc'] == team_data['xgc']].iloc[0]
@@ -269,7 +269,7 @@ def filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order):
       for team_data in overall_data:
         cs_rank=df['cs'].rank(ascending=True, method='min')
         team_data['cs_rank'] =cs_rank[df['cs'] == team_data['cs']].iloc[0]
-        goalc_rank=df['goalsc'].rank(ascending=True, method='min')
+        goalc_rank=df['goalsc'].rank(ascending=False, method='min')
         team_data['goalc_rank'] =goalc_rank[df['goalsc'] == team_data['goalsc']].iloc[0]
         xgc_rank=df['xgc'].rank(ascending=True, method='min')
         team_data['xgc_rank'] =xgc_rank[df['xgc'] == team_data['xgc']].iloc[0]

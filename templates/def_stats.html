@@ -89,7 +89,7 @@
             });
         });
         function calculateColor(value) {
-            const normalized = (value - 1) / (20 - 1); // Normalize between 0 and 1
+            const normalized = Math.floor((value-1)/4) / 4; // Normalize between 0 and 1
             const red = Math.round(255 * normalized); // Darker red for higher values
             return `rgb(255, ${255 - red}, ${255 - red})`; // Red and white gradient
         }

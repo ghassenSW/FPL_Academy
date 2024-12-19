@@ -90,9 +90,10 @@
         });
 
         function calculateColor(value) {
-                const normalized = (value - 1) / (20 - 1); // Normalize between 0 and 1
-                const blue = Math.round(255 * (1-normalized)); // Darker blue for higher values
-                return `rgb(${255 - blue}, ${255 - blue}, 255)`; // Blue and white gradient
+            const normalized = Math.floor((value - 1) / 4) / 4; // Normalize between 0 and 1
+            const blue = Math.round(64 + 191 * (1 - normalized)); // Range for blue: 64 to 255
+            const redAndGreen = Math.round(64 + 191 * normalized); // Range for red & green: 64 to 255
+            return `rgb(${redAndGreen}, ${redAndGreen}, 255)`; // Gradient from (64, 64, 255) to (255, 255, 255)
         }
 
         function updateTable(data) {

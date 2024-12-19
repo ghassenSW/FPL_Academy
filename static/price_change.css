@@ -155,3 +155,16 @@ tbody tr:nth-child(even) {
       padding: 15px; /* Reduce padding for smaller cards */
   }
 }
+
+.date {
+  font-size: 1.2rem; /* Slightly larger font */
+  font-weight: bold; /* Make it stand out */
+  color: #ffffff; /* White text for contrast */
+  background: linear-gradient(90deg, #6a11cb, #2575fc); /* Vibrant gradient like the blue page */
+  padding: 10px 20px; /* Add spacious padding */
+  border-radius: 10px; /* Rounded corners for a soft look */
+  text-align: center; /* Center the text */
+  display: inline-block; /* Keeps it inline yet styled */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+  margin-bottom: 20px; /* Space below the date */
+}

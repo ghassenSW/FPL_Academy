@@ -8,9 +8,11 @@
 </head>
 <body>
   <div class="title-container">
-    <div>Price Changes on day {{day}}</div>
+    <div>Price Changes</div>
   </div>
+  {%for data in day_data%}
   <div class="container">
+    <div class="date">Date: {{data.day}}</div>
     <div class="tables">
       <!-- Left Table -->
       <div class="table-card">
@@ -32,11 +34,11 @@
             </tr>
           </thead>
           <tbody>
-            {% for i in range(risers.players|length) %}
+            {% for i in range(data.risers.players|length) %}
             <tr>
-              <td>{{risers.players[i]}}</td>
-              <td>{{risers.cost[i]}}</td>
-              <td>{{risers.team[i]}}</td>
+              <td>{{data.risers.players[i]}}</td>
+              <td>{{data.risers.cost[i]}}</td>
+              <td>{{data.risers.team[i]}}</td>
             </tr>
             {%endfor%}
           </tbody>
@@ -63,11 +65,11 @@
             </tr>
           </thead>
           <tbody>
-            {% for i in range(fallers.players|length) %}
+            {% for i in range(data.fallers.players|length) %}
             <tr>
-              <td>{{fallers.players[i]}}</td>
-              <td>{{fallers.cost[i]}}</td>
-              <td>{{fallers.team[i]}}</td>
+              <td>{{data.fallers.players[i]}}</td>
+              <td>{{data.fallers.cost[i]}}</td>
+              <td>{{data.fallers.team[i]}}</td>
             </tr>
             {%endfor%}
           </tbody>
@@ -76,10 +78,12 @@
     </div>
 
     <!-- Button Section -->
-    <div class="button-container">
-      <button class="post-twitter-btn" id="copy_price_change">Copy Text</button>
+    <div class="button-container" id="button_price">
+      <button class="post-twitter-btn" id={{data.id}}>Copy Text</button>
     </div>
   </div>
+  {%endfor%}
+
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

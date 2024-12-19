@@ -41,18 +41,13 @@ def update_mongo_data():
     print("MongoDB data overwritten successfully with new fpl data.")
 
 def get_num_gw():
-    present_fixtures=url_to_df('https://fantasy.premierleague.com/api/fixtures/?future=1')
-    num_gw=present_fixtures['event'].min()
-    fixtures=url_to_df('https://fantasy.premierleague.com/api/fixtures')
-    fixtures=fixtures[fixtures['event']==num_gw-1]
-    if fixtures.iloc[-1]['finished']==False:
-        num_gw-=1
+    events=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','events')
+    num_gw=len(events[events['finished']==True])+1
     return num_gw
 
-def df_to_text(df):
+def df_to_text(df,day):
   num_gw=get_num_gw()
-  current_time=datetime.now().date()
-  text=f'💰 FPL Daily Price Changes ({current_time})\n'
+  text=f'💰 FPL Daily Price Changes ({day})\n'
   risers=df[df['cost_change_event']==1]
   fallers=df[df['cost_change_event']==-1]
   if(len(risers)!=0):
@@ -66,11 +61,12 @@ def df_to_text(df):
   text+=f'\n#FPL #GW{num_gw} #FPL_PriceChanges'
   return text
 
-def get_price_change_text(price_change_db):
-    price_changed=price_change_db.find_one()
+def get_price_change_text(price_changed):
     del price_changed['_id']
+    day=price_changed['day']
+    del price_changed['day']
     df=pd.DataFrame(price_changed)
-    text=df_to_text(df)
+    text=df_to_text(df,day)
     return text
 
 try:
@@ -95,13 +91,25 @@ if __name__ == '__main__':
   fpl_data=collection.find_one()
   old_stats=pd.DataFrame(fpl_data['elements'])
   old=prepare(old_stats)
+  current_date=datetime.now()
+
+  events=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','events')
+  events['deadline_time'] = pd.to_datetime(events['deadline_time'])
+  current_date = pd.Timestamp.now(tz="UTC").normalize()
+  previous_date = current_date - pd.Timedelta(days=1)
+
+  gw_begins=len(events[(events['deadline_time']<current_date) & (events['deadline_time']>previous_date)])!=0
+  if gw_begins:
+    price_change_db.delete_many({})
+
 
   new_stats=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')
-  new=prepare(new_stats)
+  new=prepare(new_stats) 
   unique_to_new = pd.concat([old, new]).drop_duplicates(keep=False)
   result_players = unique_to_new[~unique_to_new.isin(old)].dropna()
-
-  update = result_players.to_dict(orient="list")
-  price_change_db.delete_many({})
-  price_change_db.insert_one(update)
+  if len(result_players)>0:
+    day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
+    update = result_players.to_dict(orient="list")
+    update['day']=day
+    price_change_db.insert_one(update)
 

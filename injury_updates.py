@@ -38,6 +38,9 @@ def get_num_gw():
     return num_gw
 
 def prepare(df):
+  teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
+  my_map=dict(zip(teams['id'],teams['name']))
+  my_map=pd.DataFrame(my_map,index=[0])
   df['full_name']=df['first_name']+' '+df['second_name']
   df['team']=df['team'].map(my_map.iloc[0])
   df.loc[:,'chance_of_playing_next_round']=df.loc[:,'chance_of_playing_next_round'].fillna(101)

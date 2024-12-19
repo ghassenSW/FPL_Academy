@@ -86,20 +86,32 @@ def register():
 # price change
 @app.route("/price_change")
 def price_change():
-    price_changed=price_change_db.find_one()
-    risers={'players':[price_changed['web_name'][i] for i in range(len(price_changed['web_name'])) if price_changed['cost_change_event'][i]==1],
-            'cost':[price_changed['now_cost'][i] for i in range(len(price_changed['now_cost'])) if price_changed['cost_change_event'][i]==1],
-            'team':[price_changed['team'][i] for i in range(len(price_changed['team'])) if price_changed['cost_change_event'][i]==1]}
-    fallers={'players':[price_changed['web_name'][i] for i in range(len(price_changed['web_name'])) if price_changed['cost_change_event'][i]==-1],
-            'cost':[price_changed['now_cost'][i] for i in range(len(price_changed['now_cost'])) if price_changed['cost_change_event'][i]==-1],
-            'team':[price_changed['team'][i] for i in range(len(price_changed['team'])) if price_changed['cost_change_event'][i]==-1]}
-    current_date=datetime.now()
-    day=f'{str(current_date.day)}/{str(current_date.month)}/{str(current_date.year)}'
-    return render_template("price_change.html",risers=risers,fallers=fallers,day=day)
+    price_changed_list=list(price_change_db.find())
+    day_data=[]
+    for price_changed in price_changed_list:
+        data={'day':price_changed['day'],'id':price_changed['_id']}
+        risers={'players':[price_changed['web_name'][i] for i in range(len(price_changed['web_name'])) if price_changed['cost_change_event'][i]==1],
+                'cost':[price_changed['now_cost'][i] for i in range(len(price_changed['now_cost'])) if price_changed['cost_change_event'][i]==1],
+                'team':[price_changed['team'][i] for i in range(len(price_changed['team'])) if price_changed['cost_change_event'][i]==1]}
+        fallers={'players':[price_changed['web_name'][i] for i in range(len(price_changed['web_name'])) if price_changed['cost_change_event'][i]==-1],
+                'cost':[price_changed['now_cost'][i] for i in range(len(price_changed['now_cost'])) if price_changed['cost_change_event'][i]==-1],
+                'team':[price_changed['team'][i] for i in range(len(price_changed['team'])) if price_changed['cost_change_event'][i]==-1]}
+        data['risers']=risers
+        data['fallers']=fallers
+        day_data.append(data)
+
+    return render_template("price_change.html",day_data=day_data)
 
 @app.route('/get-copy-price-change', methods=['GET'])
 def get_copy_price_change():
-    text_to_copy = get_price_change_text(price_change_db)
+    id = request.args.get('id', type=str)
+    if not id:
+        return jsonify({'error': 'No ID provided'}), 400
+    price_changes=list(price_change_db.find())
+    price_change_df = next((item for item in price_changes if str(item['_id']) == str(id)), None)
+    if not price_change_df:
+        return jsonify({'error': 'Injury not found'}), 404
+    text_to_copy = get_price_change_text(price_change_df)
     return jsonify({'text': text_to_copy})
 
 # injury updates

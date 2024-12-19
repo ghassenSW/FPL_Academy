@@ -93,6 +93,12 @@
             const red = Math.round(255 * normalized); // Darker red for higher values
             return `rgb(255, ${255 - red}, ${255 - red})`; // Red and white gradient
         }
+        function change_color(value) {
+            if(value>16){
+                return 'white'
+            }
+            return 'black'
+        }
         function updateTable(data) {
             const tableBody = document.getElementById('data-table');
             tableBody.innerHTML = '';
@@ -101,14 +107,14 @@
                 row.innerHTML = `
                     <td class="fixed-column">${team.team}</td>
                     <td>${team.games_played}</td>
-                    <td title="Rank by CS: ${team.cs_rank}" style="background-color: ${calculateColor(team.cs_rank)}">${team.cs}</td>
-                    <td title="Rank by GC: ${team.goalc_rank}" style="background-color: ${calculateColor(team.goalc_rank)}">${team.goalsc}</td>
-                    <td title="Rank by xGC: ${team.xgc_rank}" style="background-color: ${calculateColor(team.xgc_rank)}">${team.xgc}</td>
-                    <td title="Rank by Δ xGC: ${team.delta_xgc_rank}" style="background-color: ${calculateColor(team.delta_xgc_rank)}">${team.delta_xgc}</td>
-                    <td title="Rank by Shots Conc: ${team.shotsc_rank}" style="background-color: ${calculateColor(team.shotsc_rank)}">${team.shotsc}</td>
-                    <td title="Rank by SiB Conc: ${team.sibc_rank}" style="background-color: ${calculateColor(team.sibc_rank)}">${team.sibc}</td>
-                    <td title="Rank by SoT Conc: ${team.sotc_rank}" style="background-color: ${calculateColor(team.sotc_rank)}">${team.sotc}</td>
-                    <td title="Rank by BC Conc: ${team.bcc_rank}" style="background-color: ${calculateColor(team.bcc_rank)}">${team.bcc}</td>
+                    <td title="Rank by CS: ${team.cs_rank}" style="background-color: ${calculateColor(team.cs_rank)}; color:${change_color(team.cs_rank)}">${team.cs}</td>
+                    <td title="Rank by GC: ${team.goalc_rank}" style="background-color: ${calculateColor(team.goalc_rank)}; color:${change_color(team.goalc_rank)}">${team.goalsc}</td>
+                    <td title="Rank by xGC: ${team.xgc_rank}" style="background-color: ${calculateColor(team.xgc_rank)}; color:${change_color(team.xgc_rank)}">${team.xgc}</td>
+                    <td title="Rank by Δ xGC: ${team.delta_xgc_rank}" style="background-color: ${calculateColor(team.delta_xgc_rank)}; color:${change_color(team.delta_xgc_rank)}">${team.delta_xgc}</td>
+                    <td title="Rank by Shots Conc: ${team.shotsc_rank}" style="background-color: ${calculateColor(team.shotsc_rank)}; color:${change_color(team.shotsc_rank)}">${team.shotsc}</td>
+                    <td title="Rank by SiB Conc: ${team.sibc_rank}" style="background-color: ${calculateColor(team.sibc_rank)}; color:${change_color(team.sibc_rank)}">${team.sibc}</td>
+                    <td title="Rank by SoT Conc: ${team.sotc_rank}" style="background-color: ${calculateColor(team.sotc_rank)}; color:${change_color(team.sotc_rank)}">${team.sotc}</td>
+                    <td title="Rank by BC Conc: ${team.bcc_rank}" style="background-color: ${calculateColor(team.bcc_rank)}; color:${change_color(team.bcc_rank)}">${team.bcc}</td>
                 `;
                 tableBody.appendChild(row);
             });

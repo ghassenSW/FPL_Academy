@@ -165,6 +165,7 @@ def team_card():
 @app.route('/team/<team_name>', methods=['GET', 'POST'])
 def team_page(team_name):
     session['team_name']=team_name
+    team_name=team_name.upper()
     return render_template("team_page.html", team_name=team_name,num_gw=num_gw)
 
 @app.route('/get_team_page', methods=['POST'])

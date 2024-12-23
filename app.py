@@ -7,6 +7,8 @@ from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
 from teams_stats import num_gw,filter_by_gw,teams_names
+from urllib.parse import unquote
+
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
@@ -173,6 +175,7 @@ def get_team_page():
     end_gw = int(data.get('end_gw', num_gw))
     data_type = data.get('data_type')
     team_name = session.get('team_name')
+    team_name = unquote(team_name)
     atk_stats=filter_by_gw('atk',data_type,start_gw,end_gw,'team','asc')
     def_stats=filter_by_gw('def',data_type,start_gw,end_gw,'team','asc')
     team_stats['atk']=[data for data in atk_stats if data['team']==team_name][0]

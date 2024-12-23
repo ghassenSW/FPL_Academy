@@ -187,7 +187,7 @@ button#apply-gw:active {
 }
 
 .standings-table thead {
-    background-color: #0073e6;
+    background-color: #0095ff;
     color: #fff;
 }
 
@@ -270,3 +270,61 @@ th:hover::after {
 .standings-table thead th.fixed-column {
     z-index: 3;
 }
+
+
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Spinner inside the loader */
+.loader::after {
+    content: "";
+    width: 50px;
+    height: 50px;
+    border: 5px solid #fff; /* Outer circle */
+    border-top: 5px solid #3498db; /* Blue color for spinning */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Spin animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Style for the logo link */
+.logo-link {
+    position: absolute;
+    top: 10px; /* Distance from the top of the page */
+    left: 10px; /* Distance from the left of the page */
+    z-index: 1000; /* Ensure it is above other elements */
+    text-decoration: none; /* Remove underline (if any) */
+  }
+  
+  /* Style for the logo image */
+  .logo {
+    width: 120px; /* Set the size of the logo */
+    height: 120px; /* Make height equal to width for a perfect circle */
+    object-fit: cover; /* Ensure the logo fits within the circle */
+    border-radius: 50%; /* Make the image circular */
+    cursor: pointer; /* Show pointer cursor to indicate it's clickable */
+  }
+  
+  .logo:hover {
+    opacity: 0.8; /* Slightly dim the logo on hover */
+  }
+  

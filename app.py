@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
-from teams_stats import num_gw,filter_by_gw
+from teams_stats import num_gw,filter_by_gw,teams_emoji
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
@@ -155,6 +155,30 @@ def get_stats():
     data_type = data.get('data_type')
     stats_data=filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order)
     return jsonify(stats=stats_data,data_type=data_type,num_gw=num_gw)
+
+@app.route("/team_card")
+def team_card():
+    return render_template("team_card.html",num_gw=num_gw,teams_emoji=teams_emoji)
+ 
+@app.route('/team/<team_name>', methods=['GET', 'POST'])
+def team_page(team_name):
+    session['team_name']=team_name
+    return render_template("team_page.html", team_name=team_name,num_gw=num_gw)
+
+@app.route('/get_team_page', methods=['POST'])
+def get_team_page():
+    team_stats={}
+    data=request.get_json()
+    start_gw = int(data.get('start_gw', 1))
+    end_gw = int(data.get('end_gw', num_gw))
+    data_type = data.get('data_type')
+    team_name = session.get('team_name')
+    atk_stats=filter_by_gw('atk',data_type,start_gw,end_gw,'team','asc')
+    def_stats=filter_by_gw('def',data_type,start_gw,end_gw,'team','asc')
+    team_stats['atk']=[data for data in atk_stats if data['team']==team_name][0]
+    team_stats['def']=[data for data in def_stats if data['team']==team_name][0]
+    return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw)
+
 
 @app.route('/index')
 def index():

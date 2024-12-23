@@ -9,9 +9,13 @@
 
 </head>
 <body>
-    <div class="container">
+    <div id="loader" class="loader"></div>
+    <a href="{{ url_for('index') }}" class="logo-link">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Home" class="logo">
+    </a>
+    <div class="container" id="container" style="display: none;">
         <div class="title-container">
-            <div>Premier League Attack Stats</div>
+            <div>PREMIER LEAGUE ATTACK STATS</div>
             <div class="subtitle">Track your team's attack performance with updated stats</div>
         </div>
         <div class="page-header">
@@ -214,6 +218,13 @@
                     $(this).val(startGw);
                 }
             });
+        });
+
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            const content = document.getElementById('container');
+            loader.style.display = 'none';
+            content.style.display = 'block';
         });
     </script>
 </body>

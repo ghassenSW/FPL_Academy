@@ -7,8 +7,11 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='price_change.css') }}">
 </head>
 <body>
+  <a href="{{ url_for('index') }}" class="logo-link">
+    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Home" class="logo">
+  </a>
   <div class="title-container">
-    <div>Price Changes on day {{day}}</div>
+    <div>Injuries on day {{day}}</div>
   </div>
   <div class="container">
     <!-- Tables Section -->

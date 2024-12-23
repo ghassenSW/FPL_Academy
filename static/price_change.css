@@ -168,3 +168,25 @@ tbody tr:nth-child(even) {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
   margin-bottom: 20px; /* Space below the date */
 }
+
+/* Style for the logo link */
+.logo-link {
+  position: absolute;
+  top: 10px; /* Distance from the top of the page */
+  left: 10px; /* Distance from the left of the page */
+  z-index: 1000; /* Ensure it is above other elements */
+  text-decoration: none; /* Remove underline (if any) */
+}
+
+/* Style for the logo image */
+.logo {
+  width: 120px; /* Set the size of the logo */
+  height: 120px; /* Make height equal to width for a perfect circle */
+  object-fit: cover; /* Ensure the logo fits within the circle */
+  border-radius: 50%; /* Make the image circular */
+  cursor: pointer; /* Show pointer cursor to indicate it's clickable */
+}
+
+.logo:hover {
+  opacity: 0.8; /* Slightly dim the logo on hover */
+}

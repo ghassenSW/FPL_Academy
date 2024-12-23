@@ -1,0 +1,205 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full-page layout */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background:linear-gradient(90deg, #00d6f7, #bd18ff);
+
+}
+
+.page_header {
+  text-align: center;
+  color: white;
+}
+/* First container (title centered) */
+.title-container {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 20px; /* Add spacing below title */
+  margin-top:100px;
+}
+
+/* Second row container holding buttons */
+.bottom-row {
+  margin-top:50px;
+  margin-bottom:50px;
+  display: flex;
+  flex: 1;
+}
+
+/* Left and right containers in second row */
+.switch-container, .gw-selection {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.switch-btn {
+  margin-left:5px;
+  padding: 10px 25px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #0FE3E3;/* Green button */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.switch-btn:hover {
+  background-color: #3A0CA3; /* Turquoise hover */
+}
+.switch-btn.selected {
+  background-color: #3A0CA3;/* Turquoise for selected buttons */
+}
+.gw-selection label {
+  margin-right: 5px;
+  margin-left:5px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.gw-selection input {
+  width: 60px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff; /* White input field */
+  color: #000000;
+  text-align: center;
+}
+
+.gw-selection button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #3A0CA3; /* Purple button */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.gw-selection button:hover {
+  background-color: #2DE68A; /* Green hover effect */
+}
+
+
+/* Style for the logo link */
+.logo-link {
+  position: absolute;
+  top: 10px; /* Distance from the top of the page */
+  left: 10px; /* Distance from the left of the page */
+  z-index: 1000; /* Ensure it is above other elements */
+  text-decoration: none; /* Remove underline (if any) */
+}
+
+/* Style for the logo image */
+.logo {
+  width: 120px; /* Set the size of the logo */
+  height: 120px; /* Make height equal to width for a perfect circle */
+  object-fit: cover; /* Ensure the logo fits within the circle */
+  border-radius: 50%; /* Make the image circular */
+  cursor: pointer; /* Show pointer cursor to indicate it's clickable */
+}
+
+.logo:hover {
+  opacity: 0.8; /* Slightly dim the logo on hover */
+}
+
+/* Tables Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.tables {
+  margin-left:50px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Table Card */
+.table-card {
+  flex: 1 1 48%;
+  background-color: #fff; /* White background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.card-header {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #3A0CA3; /* Purple title */
+  margin-bottom: 10px;
+}
+
+.card-header span {
+  color: #3f00b5; /* Green accent */
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+thead {
+  background-color: #3A0CA3; /* Purple header */
+  color: #fff;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #F2F9FF; /* Light blue for even rows */
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #ffffff; /* White for odd rows */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tables {
+    flex-wrap: wrap;
+  }
+
+  .table-card {
+    flex: 1 1 100%; /* Full width on smaller screens */
+  }
+
+  .switch-container,
+  .gw-selection {
+    justify-content: center;
+  }
+
+  .gw-selection input {
+    width: 50px;
+  }
+}
+

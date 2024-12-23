@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Price Change</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='team_card.css') }}">
+</head>
+<body>
+  <a href="{{ url_for('index') }}" class="logo-link">
+    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Home" class="logo">
+  </a>
+  <div class="title-container">
+    <div>Select Team</div>
+  </div>
+  <ul class="team-list">
+    {% for team in teams_emoji %}
+    <li class="team-item">
+        <a href="{{ url_for('team_page', team_name=team[2:]) }}" class="team-link">{{ team }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+
+</body>
+</html>

@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
-from teams_stats import num_gw,filter_by_gw,teams_emoji
+from teams_stats import num_gw,filter_by_gw,teams_names
 
 app = Flask(__name__)
 app.secret_key = 'f3082ef12d47bf71416425c7eef8d573'
@@ -158,7 +158,7 @@ def get_stats():
 
 @app.route("/team_card")
 def team_card():
-    return render_template("team_card.html",num_gw=num_gw,teams_emoji=teams_emoji)
+    return render_template("team_card.html",num_gw=num_gw,teams_names=teams_names)
  
 @app.route('/team/<team_name>', methods=['GET', 'POST'])
 def team_page(team_name):

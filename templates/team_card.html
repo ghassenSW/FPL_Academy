@@ -14,9 +14,9 @@
     <div>Select Team</div>
   </div>
   <ul class="team-list">
-    {% for team in teams_emoji %}
+    {% for team in teams_names %}
     <li class="team-item">
-        <a href="{{ url_for('team_page', team_name=team[2:]) }}" class="team-link">{{ team }}</a>
+        <a href="{{ url_for('team_page', team_name=team) }}" class="team-link">{{ team }}</a>
     </li>
     {% endfor %}
   </ul>

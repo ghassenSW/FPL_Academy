@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from datetime import datetime
 
 teams_names=['Arsenal', 'Aston Villa','Bournemouth','Brentford','Brighton & Hove Albion','Chelsea','Crystal Palace','Everton','Fulham','Ipswich Town','Leicester City','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Southampton','Tottenham Hotspur','West Ham United','Wolverhampton']
-teams_emoji = ['🔫 Arsenal','🦁 Aston Villa','🍒 Bournemouth','🐝 Brentford','🕊 Brighton & Hove Albion','🔵 Chelsea', '🦅 Crystal Palace','🍬 Everton', '⚪️ Fulham','🚜 Ipswich Town','🦊 Leicester City','🔴 Liverpool', '🌑 Manchester City','👹 Manchester United', '⚫️ Newcastle United','🌳 Nottingham Forest', '😇 Southampton', '🐓 Tottenham Hotspur', '⚒️ West Ham United', '🐺 Wolverhampton']
+teams_emoji = ['🔫 Arsenal','🦁 Aston Villa','🍒 Bournemouth','🐝 Brentford','🕊 Brighton & Hove Albion','🔵 Chelsea', '🦅 Crystal Palace','🍬 Everton', '⚪️Fulham','🚜 Ipswich Town','🦊 Leicester City','🔴 Liverpool', '🌑 Manchester City','👹 Manchester United', '⚫️Newcastle United','🌳 Nottingham Forest', '😇 Southampton', '🐓 Tottenham Hotspur', '⚒️West Ham United', '🐺 Wolverhampton']
 
 try:
   from dotenv import load_dotenv

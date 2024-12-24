@@ -198,14 +198,20 @@ def get_comparison():
     team2=data.get('team2','Arsenal')
     atk_def=data.get('atk_def','atk')
     data_type = data.get('data_type','overall')
-    if(atk_def=='atk'):
-        atk_stats=filter_by_gw('atk',data_type,start_gw,end_gw,'team','asc')
-        team_stats['team1']=[data for data in atk_stats if data['team']==team1][0]
-        team_stats['team2']=[data for data in atk_stats if data['team']==team2][0]
-    if(atk_def=='def'):
-        def_stats=filter_by_gw('def',data_type,start_gw,end_gw,'team','asc')
-        team_stats['team1']=[data for data in def_stats if data['team']==team1][0]
-        team_stats['team2']=[data for data in def_stats if data['team']==team2][0]
+
+    print(team1,team2)
+    if(team1=='SELECT' or team2=='SELECT'):
+        team1='select team1'
+        team2='select team2'
+    else:
+        if(atk_def=='atk'):
+            atk_stats=filter_by_gw('atk',data_type,start_gw,end_gw,'team','asc')
+            team_stats['team1']=[data for data in atk_stats if data['team']==team1][0]
+            team_stats['team2']=[data for data in atk_stats if data['team']==team2][0]
+        if(atk_def=='def'):
+            def_stats=filter_by_gw('def',data_type,start_gw,end_gw,'team','asc')
+            team_stats['team1']=[data for data in def_stats if data['team']==team1][0]
+            team_stats['team2']=[data for data in def_stats if data['team']==team2][0]
     return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw,team1=team1,team2=team2)
 
 

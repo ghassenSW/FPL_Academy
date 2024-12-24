@@ -184,6 +184,30 @@ def get_team_page():
     team_stats['def']=[data for data in def_stats if data['team']==team_name][0]
     return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw)
 
+@app.route("/team_comparison")
+def team_comparison():
+    return render_template("team_comparison.html",num_gw=num_gw,teams_names=teams_names)
+
+@app.route('/get_comparison', methods=['POST','GET'])
+def get_comparison():
+    team_stats={}
+    data=request.get_json()
+    start_gw = int(data.get('start_gw', 1))
+    end_gw = int(data.get('end_gw', num_gw))
+    team1=data.get('team1','Arsenal')
+    team2=data.get('team2','Arsenal')
+    atk_def=data.get('atk_def','atk')
+    data_type = data.get('data_type','overall')
+    if(atk_def=='atk'):
+        atk_stats=filter_by_gw('atk',data_type,start_gw,end_gw,'team','asc')
+        team_stats['team1']=[data for data in atk_stats if data['team']==team1][0]
+        team_stats['team2']=[data for data in atk_stats if data['team']==team2][0]
+    if(atk_def=='def'):
+        def_stats=filter_by_gw('def',data_type,start_gw,end_gw,'team','asc')
+        team_stats['team1']=[data for data in def_stats if data['team']==team1][0]
+        team_stats['team2']=[data for data in def_stats if data['team']==team2][0]
+    return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw,team1=team1,team2=team2)
+
 
 @app.route('/index')
 def index():

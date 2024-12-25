@@ -199,7 +199,6 @@ def get_comparison():
     atk_def=data.get('atk_def','atk')
     data_type = data.get('data_type','overall')
 
-    print(team1,team2)
     if(team1=='SELECT' or team2=='SELECT'):
         team1='select team1'
         team2='select team2'

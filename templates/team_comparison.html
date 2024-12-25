@@ -13,35 +13,44 @@
     <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Home" class="logo">
   </a>
   <div class="page_header">
-    <div class="bottom-row">
-        <div class="switch-container">
-            <button id="overall-btn" class="switch-btn selected">Overall</button>
-            <button id="home-btn" class="switch-btn">Home</button>
-            <button id="away-btn" class="switch-btn">Away</button>
+    <div class="flex-container">
+        <div class="row-data"></div>
+            <div class="left-box">
+                <div class="switch-container">
+                    <button id="overall-btn" class="switch-btn selected">Overall</button>
+                    <button id="home-btn" class="switch-btn">Home</button>
+                    <button id="away-btn" class="switch-btn">Away</button>
+                </div>
+            <div class="right-box">
+                <div class="switch-container">
+                    <button id="atk-btn" class="atk_def-btn selected">Attack</button>
+                    <button id="def-btn" class="atk_def-btn">Defence</button>
+                </div>
+            </div>
         </div>
-        <div class="switch-container">
-            <button id="atk-btn" class="atk_def-btn selected">Attack</button>
-            <button id="def-btn" class="atk_def-btn">Defence</button>
-        </div>
-    </div>
-    <div class="bottom-row">
-        <div class="gw-selection">
-            <label for="team1">TEAM 1</label>
-            <select name="team1" id="team1" required>
-                <option value="SELECT" selected>Select Team 1</option>
-                {% for team in teams_names %}
-                <option value="{{ team }}">{{ team }}</option>
-                {% endfor %}
-            </select>
-            <label for="team2">TEAM 2</label>
-            <select name="team2" id="team2" required>
-                <option value="SELECt"  selected>Select Team 2</option>
-                {% for team in teams_names %}
-                <option value="{{ team }}">{{ team }}</option>
-                {% endfor %}
-            </select>
+        
+        <div class="team-selection">
+            <div class="team-row">
+                <label for="team1">TEAM 1</label>
+                <select name="team1" id="team1" required>
+                    <option value="SELECT" selected>Select Team 1</option>
+                    {% for team in teams_names %}
+                    <option value="{{ team }}">{{ team }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="team-row">
+                <label for="team2">TEAM 2</label>
+                <select name="team2" id="team2" required>
+                    <option value="SELECt"  selected>Select Team 2</option>
+                    {% for team in teams_names %}
+                    <option value="{{ team }}">{{ team }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <button type="submit" class="compare-button" id="compare-btn">COMPARE</button>
-        </div>
+          </div>
+          
         <div class="gw-selection">
             <label for="start-gw">Start GW:</label>
             <input type="number" id="start-gw" min="1" max="{{ num_gw }}" value="1">
@@ -63,7 +72,15 @@
       </div>
         <table>
           <tbody id="data">
-            
+            <tr><td>Played</td><td>-</td><td>-</td></tr>
+            <tr><td>Goals</td><td>-</td><td>-</td></tr>
+            <tr><td>xG</td><td>-</td><td>-</td></tr>
+            <tr><td>Δ xG</td><td>-</td><td>-</td></tr>
+            <tr><td>Shots</td><td>-</td><td>-</td></tr>
+            <tr><td>SiB</td><td>-</td><td>-</td></tr>
+            <tr><td>SoT</td><td>-</td><td>-</td></tr>
+            <tr><td>BC</td><td>-</td><td>-</td></tr>
+            <tr><td>FTS</td><td>-</td><td>-</td></tr>
           </tbody>
         </table>
       </div>
@@ -78,7 +95,7 @@
     function updateTable_atk(data,team1,team2) {
       const tableBody_atk = document.getElementById('data');
       tableBody_atk.innerHTML = `
-            <th>STATS</th>
+            <th>TEAMS</th>
             <th>${team1}</th>
             <th>${team2}</th>`;
 
@@ -91,6 +108,7 @@
           `;
           tableBody_atk.appendChild(row);
       }
+      createRow('Played',data.team1.games_played,data.team2.games_played,'Games Played')
       createRow('Goals', data.team1.goals, data.team2.goals, 'Goals Scored');
       createRow('xG', data.team1.xg, data.team2.xg, 'Expected Goals');
       createRow('Δ xG', data.team1.delta_xg, data.team2.delta_xg, 'G -xG');
@@ -104,7 +122,7 @@
     function updateTable_def(data,team1,team2) {
       const tableBody_def = document.getElementById('data');
       tableBody_def.innerHTML = `
-            <th>STATS</th>
+            <th>TEAMS</th>
             <th>${team1}</th>
             <th>${team2}</th>`;
 
@@ -117,6 +135,7 @@
           `;
           tableBody_def.appendChild(row);
       }
+      createRow('Played',data.team1.games_played,data.team2.games_played,'Games Played')
       createRow('Coals Conc', data.team1.goalsc, data.team2.goalsc, 'Goals Conceded');
       createRow('xGC', data.team1.xgc, data.team2.xgc, 'Expected Goals Conceded');
       createRow('Δ xG', data.team1.delta_xgc, data.team2.delta_xgc, 'GC -xGC');
@@ -161,9 +180,9 @@
         });
     }
 
-    $(document).ready(function() {
-        fetchAndSendStats(currentDataType,atk_def);
-    });
+    // $(document).ready(function() {
+    //     fetchAndSendStats(currentDataType,atk_def);
+    // });
     $('#apply-gw').click(function() {
         fetchAndSendStats(currentDataType,atk_def);
     })

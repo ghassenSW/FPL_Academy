@@ -27,13 +27,6 @@ body {
   margin-top:50px;
 }
 
-/* Second row container holding buttons */
-.bottom-row {
-  margin-top:50px;
-  margin-bottom:50px;
-  display: flex;
-  flex: 1;
-}
 
 /* Left and right containers in second row */
 .switch-container, .gw-selection {
@@ -178,13 +171,19 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed; /* Fixes column width */
 }
 
 table th,
 table td {
+  width: 33%; /* Equal column widths */
+  height: 40px; /* Consistent row height */
   padding: 10px;
   text-align: center;
-  color:#000000;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #000000;
   border: 1px solid #ddd;
 }
 
@@ -195,13 +194,14 @@ thead {
 }
 
 tbody tr:nth-child(even) {
-  color:#000000;
+  color: #000000;
   background-color: #F2F9FF; /* Light blue for even rows */
 }
 
 tbody tr:nth-child(odd) {
   background-color: #ffffff; /* White for odd rows */
 }
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -221,5 +221,79 @@ tbody tr:nth-child(odd) {
   .gw-selection input {
     width: 50px;
   }
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  gap: 20px; /* Spacing between elements */
+}
+.team-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start; /* Align items to the left */
+}
+
+.team-row {
+  display: flex;
+  flex-direction: column; /* Stack label and select vertically */
+}
+
+.team-row label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.team-row select {
+  width: 100%; /* Full width dropdowns */
+  padding: 5px;
+  border: 1px solid #2c00f0;
+  border-radius: 6px;
+}
+
+.compare-button {
+  align-self: center; /* Align the button to the right */
+  background-color: #3A0CA3; /* Purple button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.compare-button:hover {
+  background-color: #00e990; /* Darker purple on hover */
+}
+
+/* Main Container */
+.flex-container {
+  display: flex;
+  position: relative; /* Allows for absolute positioning of elements if needed */
+  height: 50vh; /* Full height of the viewport */
+  width: 100%; /* Full width of the page */
+}
+
+/* Left Box */
+.left-box {
+  flex: 0 0 20%; /* Take 50% of the container's width */
+  display: flex;
+  justify-content: center; /* Center horizontally within the box */
+  align-items: center; /* Center vertically */
+  position: relative;
+  left: -20%; /* Shift it to 1/4 of the page */
+  height: 100%; /* Match the container height */
+}
+
+/* Right Box */
+.right-box {
+  flex: 0 0 50%; /* Take 50% of the container's width */
+    display: flex;
+  justify-content: center; /* Center horizontally within the box */
+  align-items: center; /* Center vertically */
+  position: relative;
+  left: 100%; /* Shift it to 3/4 of the page */
+  height: 100%; /* Match the container height */
 }
 

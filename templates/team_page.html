@@ -65,6 +65,9 @@
     let currentDataType = 'overall';
     let num_gw;
     function rank_text(rank){
+      if (! (typeof rank==='number')){
+        return ''
+      }
       if (rank % 100 >= 11 && rank % 100 <= 13)
         {return rank +'th';}
       else if (rank%10==1)
@@ -92,7 +95,7 @@
           `;
           tableBody_atk.appendChild(row);
       }
-
+      createRow('Played', data.atk.games_played, '', 'Goals Conceded');
       createRow('Goals', data.atk.goals, data.atk.goal_rank, 'Goals Scored');
       createRow('xG', data.atk.xg, data.atk.xg_rank, 'Expected Goals');
       createRow('Δ xG', data.atk.delta_xg, data.atk.delta_xg_rank, 'G -xG');
@@ -118,7 +121,7 @@
           `;
           tableBody_def.appendChild(row);
       }
-
+      createRow('Played', data.def.games_played, '', 'Goals Conceded');
       createRow('Coals Conc', data.def.goalsc, data.def.goalc_rank, 'Goals Conceded');
       createRow('xGC', data.def.xgc, data.def.xgc_rank, 'Expected Goals Conceded');
       createRow('Δ xGC', data.def.delta_xgc, data.def.delta_xgc_rank, 'GC -xGC');

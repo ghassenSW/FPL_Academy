@@ -42,9 +42,12 @@
       </div>
         <table>
           <tbody id="atk_data">
-            
           </tbody>
         </table>
+        <div>
+          <p class="text-box" id="atk_text_box" contenteditable="true" style="text-align:left; border: 1px solid #ccc; padding: 10px;"></p>
+          <button class="copy-btn" onclick="copyText(this)">COPY</button>
+        </div>
       </div>
 
       <!-- Right Table -->
@@ -58,8 +61,13 @@
           <tbody id="def_data">
           </tbody>
         </table>
+        <div>
+          <p class="text-box" id="def_text_box" contenteditable="true" style="text-align:left; border: 1px solid #ccc; padding: 10px;"></p>
+          <button class="copy-btn" onclick="copyText(this)">COPY</button>
+        </div>
       </div>
     </div>
+
   </div>
   <script>
     let currentDataType = 'overall';
@@ -79,7 +87,11 @@
       else
         {return rank+'th'}
     }
-    function updateTable_atk(data) {
+    function updateTable_atk(data,atk_text) {
+      const text_box_atk=document.getElementById('atk_text_box')
+      const formattedText = atk_text.replace(/\n/g, "<br>");
+      text_box_atk.innerHTML=`${formattedText}`
+
       const tableBody_atk = document.getElementById('atk_data');
       tableBody_atk.innerHTML = `
             <th></th>
@@ -105,7 +117,11 @@
       createRow('BC', data.atk.bc, data.atk.bc_rank, 'Big Chances');
       createRow('FTS', data.atk.failed_to_score, data.atk.fts_rank, 'Failed To Score');
     }
-    function updateTable_def(data) {
+    function updateTable_def(data,def_text) {
+      const text_box_def=document.getElementById('def_text_box')
+      const formattedText = def_text.replace(/\n/g, "<br>");
+      text_box_def.innerHTML=`${formattedText}`
+
       const tableBody_def = document.getElementById('def_data');
       tableBody_def.innerHTML = `
             <th></th>
@@ -147,8 +163,8 @@
                 end_gw: endGw,
             }),
             success: function(response) {
-                updateTable_atk(response['team_stats']);
-                updateTable_def(response['team_stats'])
+                updateTable_atk(response['team_stats'],response['atk_text']);
+                updateTable_def(response['team_stats'],response['def_text']);
                 num_gw=response['num_gw']
             },
             error: function(xhr, status, error) {
@@ -213,6 +229,16 @@
             }
         });
     });
+
+    function copyText(button) {
+    const textBox = button.parentElement;
+    const textToCopy = textBox.querySelector('p').innerText;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      alert("Text copied");
+    }).catch(err => {
+      console.error("Failed to copy text: ", err);
+    });
+    }
 </script>
 </body>
 </html>

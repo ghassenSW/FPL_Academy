@@ -285,3 +285,52 @@ def filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order):
         team_data['bcc_rank'] =bcc_rank[df['bcc'] == team_data['bcc']].iloc[0]
       overall_data=sorted(overall_data,key=lambda x: x[sort_by],reverse=(sort_order=="asc"))
       return overall_data
+    
+def get_rank(rank):
+  if (rank % 100 >= 11 and rank % 100 <= 13):
+    return str(rank)+'th'
+  if (rank%10==1):
+    return str(rank)+'st'
+  if (rank%10==1):
+    return str(rank)+'st'
+  if (rank%10==2):
+    return str(rank)+'nd'
+  if (rank%10==3):
+    return str(rank)+'rd'
+  else:
+    return str(rank)+'th'
+
+def get_text(team_name,start_gw,end_gw,team_stats,data_type):
+    if data_type=='overall':
+      data_type =''
+    elif data_type=='home':
+      data_type='Home '
+    elif data_type=='away':
+      data_type='Away '
+    atk_text=f"{team_name} {data_type}Attack "
+    if num_gw==end_gw-start_gw+1:
+      atk_text+=f"so far this season [GW{start_gw}-GW{end_gw}] :\n\n"
+    else:
+      atk_text+=f"Between GW{start_gw} & GW{end_gw} :\n\n"
+    atk_text+=f"{int(team_stats['atk']['goals'])} goals scored ({get_rank(int(team_stats['atk']['goal_rank']))});\n"
+    atk_text+=f"xG = {team_stats['atk']['xg']} ({get_rank(int(team_stats['atk']['xg_rank']))});\n"
+    atk_text+=f"{int(team_stats['atk']['shots'])} shots ({get_rank(int(team_stats['atk']['shots_rank']))});\n"
+    atk_text+=f"{int(team_stats['atk']['sib'])} shots in box ({get_rank(int(team_stats['atk']['sib_rank']))});\n"
+    atk_text+=f"{int(team_stats['atk']['sot'])} shots on target ({get_rank(int(team_stats['atk']['sot_rank']))});\n"
+    atk_text+=f"{int(team_stats['atk']['bc'])} big chances ({get_rank(int(team_stats['atk']['bc_rank']))});\n"
+    atk_text+=f"Failed to score {int(team_stats['atk']['failed_to_score'])}: ({get_rank(int(team_stats['atk']['fts_rank']))});"
+
+    def_text=f"{team_name} {data_type}Defence "
+    if num_gw==end_gw-start_gw+1:
+      def_text+=f"so far this season [GW{start_gw}-GW{end_gw}] :\n\n"
+    else:
+      def_text+=f"Between GW{start_gw} & GW{end_gw} :\n\n"
+    def_text+=f"{int(team_stats['def']['cs'])} Clean Sheets ({get_rank(int(team_stats['def']['cs_rank']))});\n"
+    def_text+=f"{int(team_stats['def']['goalsc'])} goals Conceded ({get_rank(int(team_stats['def']['goalc_rank']))});\n"
+    def_text+=f"xGC = {team_stats['def']['xgc']} ({get_rank(int(team_stats['def']['xgc_rank']))});\n"
+    def_text+=f"{int(team_stats['def']['shotsc'])} shots Conceded ({get_rank(int(team_stats['def']['shotsc_rank']))});\n"
+    def_text+=f"{int(team_stats['def']['sibc'])} shots in box Conceded ({get_rank(int(team_stats['def']['sibc_rank']))});\n"
+    def_text+=f"{int(team_stats['def']['sotc'])} shots on target Conceded ({get_rank(int(team_stats['def']['sotc_rank']))});\n"
+    def_text+=f"{int(team_stats['def']['bcc'])} big chances Conceded ({get_rank(int(team_stats['def']['bcc_rank']))});"
+
+    return atk_text,def_text

@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
-from teams_stats import num_gw,filter_by_gw,teams_names
+from teams_stats import num_gw,filter_by_gw,teams_names,get_text
 from urllib.parse import unquote
 
 
@@ -182,7 +182,9 @@ def get_team_page():
     def_stats=filter_by_gw('def',data_type,start_gw,end_gw,'team','asc')
     team_stats['atk']=[data for data in atk_stats if data['team']==team_name][0]
     team_stats['def']=[data for data in def_stats if data['team']==team_name][0]
-    return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw)
+    
+    atk_text,def_text=get_text(team_name,start_gw,end_gw,team_stats,data_type)
+    return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw,atk_text=atk_text,def_text=def_text)
 
 @app.route("/team_comparison")
 def team_comparison():

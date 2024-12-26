@@ -19,7 +19,7 @@ body {
   /* Sidebar */
   .sidebar {
     width: 250px;
-    background:linear-gradient(270deg, #00d6f7, #bd18ff);
+    background:linear-gradient(60deg, #0731bd, #03b4e0);
     padding: 20px;
     color: #fff;
   }
@@ -47,7 +47,9 @@ body {
   
   .sidebar nav ul li a:hover,
   .sidebar nav ul li a.active {
-    background-color: #0091D5;
+    background-color: #ffffff;
+    color:#200707;
+    font-weight: bold;
   }
   
   /* Main Content */

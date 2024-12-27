@@ -10,6 +10,8 @@ team_emoji = {
     "Arsenal": "🔫 Arsenal","Aston Villa": "🦁 Aston Villa","Bournemouth": "🍒 Bournemouth","Brentford": "🐝 Brentford","Brighton & Hove Albion": "🕊 Brighton","Chelsea": "🔵 Chelsea","Crystal Palace": "🦅 Crystal Palace","Everton": "🍬 Everton","Fulham": "⚪️ Fulham","Ipswich Town": "🚜 Ipswich","Leicester City": "🦊 Leicester","Liverpool": "🔴 Liverpool","Manchester City": "🌑 Man City","Manchester United": "👹 Man Utd","Newcastle United": "⚫️ Newcastle","Nottingham Forest": "🌳 Nott'm Forest","Southampton": "😇 Southampton","Tottenham Hotspur": "🐓 Spurs","West Ham United": "⚒️ West Ham","Wolverhampton": "🐺 Wolves"
 }
 
+teams_short_names = {'Arsenal': 'ARS','Chelsea': 'CHE','Brentford': 'BRE','Bournemouth': 'BOU','Crystal Palace': 'CRY','Fulham': 'FUL','West Ham United': 'WHU','Everton': 'EVE','Wolverhampton': 'WOL','Southampton': 'SOU','Brighton & Hove Albion': 'BHA','Manchester City': 'MCI','Liverpool': 'LIV','Aston Villa': 'AVL','Manchester United': 'MUN','Leicester City': 'LEI','Nottingham Forest': 'NFO','Newcastle United': 'NEW','Tottenham Hotspur': 'TOT','Ipswich Town': 'IPS'}
+
 try:
   from dotenv import load_dotenv
   load_dotenv()
@@ -338,3 +340,116 @@ def get_text(team_name,start_gw,end_gw,team_stats,data_type):
     def_text+=f"💥 {int(team_stats['def']['bcc'])} big chances Conceded ({get_rank(int(team_stats['def']['bcc_rank']))});"
 
     return atk_text,def_text
+
+def get_matches(stats_type,data_type,team,start_gw,end_gw):
+  stats=list(teams_stats_db.find())
+  if stats_type=='atk':
+    if data_type=='home':
+      home=[i for i in stats if i['team H']==team]
+      home_df=pd.DataFrame(home)
+      home_df=home_df[home_df['GW']>=start_gw]
+      home_df=home_df[home_df['GW']<=end_gw]
+      home_df=home_df[['team A','GW','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
+      home_df.loc[:,'team A']=home_df['team A'].apply(lambda x: teams_short_names.get(x, x) + ' (H)')
+      home_df.columns=['vs','gw','goals','xg','shots','sib','sot','bc']
+      home_df.loc[:,'delta_xg']=home_df['goals']-home_df['xg']
+      home_df['delta_xg']=home_df['delta_xg'].apply(lambda x:round(x,2))
+      home_df=home_df[['gw','vs','goals','xg','delta_xg','shots','sib','sot','bc']]
+      result = [ row.to_dict() for _, row in home_df.iterrows() ]
+      return result
+
+    elif data_type=='away':
+      away=[i for i in stats if i['team A']==team]
+      away_df=pd.DataFrame(away)
+      away_df=away_df[away_df['GW']>=start_gw]
+      away_df=away_df[away_df['GW']<=end_gw]
+      away_df=away_df[['team H','GW','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
+      away_df.loc[:,'team H']=away_df['team H'].apply(lambda x: teams_short_names.get(x, x) + ' (A)')
+      away_df.columns=['vs','gw','goals','xg','shots','sib','sot','bc']
+      away_df.loc[:,'delta_xg']=away_df['goals']-away_df['xg']
+      away_df['delta_xg']=away_df['delta_xg'].apply(lambda x:round(x,2))
+      away_df=away_df[['gw','vs','goals','xg','delta_xg','shots','sib','sot','bc']]
+      result = [ row.to_dict() for _, row in away_df.iterrows() ]
+      return result
+    
+    elif data_type=='overall':
+      home=[i for i in stats if i['team H']==team]
+      home_df=pd.DataFrame(home)
+      home_df=home_df[home_df['GW']>=start_gw]
+      home_df=home_df[home_df['GW']<=end_gw]
+      home_df=home_df[['team A','GW','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
+      home_df.loc[:,'team A']=home_df['team A'].apply(lambda x: teams_short_names.get(x, x) + ' (H)')
+      home_df.columns=['vs','gw','goals','xg','shots','sib','sot','bc']
+      home_df.loc[:,'delta_xg']=home_df['goals']-home_df['xg']
+      home_df['delta_xg']=home_df['delta_xg'].apply(lambda x:round(x,2))
+      home_df=home_df[['gw','vs','goals','xg','delta_xg','shots','sib','sot','bc']]
+      away=[i for i in stats if i['team A']==team]
+      away_df=pd.DataFrame(away)
+      away_df=away_df[away_df['GW']>=start_gw]
+      away_df=away_df[away_df['GW']<=end_gw]
+      away_df=away_df[['team H','GW','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
+      away_df.loc[:,'team H']=away_df['team H'].apply(lambda x: teams_short_names.get(x, x) + ' (A)')
+      away_df.columns=['vs','gw','goals','xg','shots','sib','sot','bc']
+      away_df.loc[:,'delta_xg']=away_df['goals']-away_df['xg']
+      away_df['delta_xg']=away_df['delta_xg'].apply(lambda x:round(x,2))
+      away_df=away_df[['gw','vs','goals','xg','delta_xg','shots','sib','sot','bc']]
+      overall_df=pd.concat([home_df,away_df],axis=0)
+      overall_df=overall_df.sort_values(by=['gw'])
+      result = [ row.to_dict() for _, row in overall_df.iterrows() ]
+      return result
+  
+  elif stats_type=='def':
+    if data_type=='home':
+      home=[i for i in stats if i['team H']==team]
+      home_df=pd.DataFrame(home)
+      home_df=home_df[home_df['GW']>=start_gw]
+      home_df=home_df[home_df['GW']<=end_gw]
+      home_df=home_df[['team A','GW','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
+      home_df.loc[:,'team A']=home_df['team A'].apply(lambda x: teams_short_names.get(x, x) + ' (H)')
+      home_df.columns=['vs','gw','goalsc','xgc','shotsc','sibc','sotc','bcc']
+      home_df.loc[:,'delta_xgc']=home_df['goalsc']-home_df['xgc']
+      home_df['delta_xgc']=home_df['delta_xgc'].apply(lambda x:round(x,2))
+      home_df=home_df[['gw','vs','goalsc','xgc','delta_xgc','shotsc','sibc','sotc','bcc']]
+      result = [ row.to_dict() for _, row in home_df.iterrows() ]
+      return result
+    
+    elif data_type=='away':
+      away=[i for i in stats if i['team A']==team]
+      away_df=pd.DataFrame(away)
+      away_df=away_df[away_df['GW']>=start_gw]
+      away_df=away_df[away_df['GW']<=end_gw]
+      away_df=away_df[['team H','GW','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
+      away_df.loc[:,'team H']=away_df['team H'].apply(lambda x: teams_short_names.get(x, x) + ' (A)')
+      away_df.columns=['vs','gw','goalsc','xgc','shotsc','sibc','sotc','bcc']
+      away_df.loc[:,'delta_xgc']=away_df['goalsc']-away_df['xgc']
+      away_df['delta_xgc']=away_df['delta_xgc'].apply(lambda x:round(x,2))
+      away_df=away_df[['gw','vs','goalsc','xgc','delta_xgc','shotsc','sibc','sotc','bcc']]
+      result = [ row.to_dict() for _, row in away_df.iterrows() ]
+      return result
+  
+    elif data_type=='overall':
+      home=[i for i in stats if i['team H']==team]
+      home_df=pd.DataFrame(home)
+      home_df=home_df[home_df['GW']>=start_gw]
+      home_df=home_df[home_df['GW']<=end_gw]
+      home_df=home_df[['team A','GW','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
+      home_df.loc[:,'team A']=home_df['team A'].apply(lambda x: teams_short_names.get(x, x) + ' (H)')
+      home_df.columns=['vs','gw','goalsc','xgc','shotsc','sibc','sotc','bcc']
+      home_df.loc[:,'delta_xgc']=home_df['goalsc']-home_df['xgc']
+      home_df['delta_xgc']=home_df['delta_xgc'].apply(lambda x:round(x,2))
+      home_df=home_df[['gw','vs','goalsc','xgc','delta_xgc','shotsc','sibc','sotc','bcc']]
+      away=[i for i in stats if i['team A']==team]
+      away_df=pd.DataFrame(away)
+      away_df=away_df[away_df['GW']>=start_gw]
+      away_df=away_df[away_df['GW']<=end_gw]
+      away_df=away_df[['team H','GW','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
+      away_df.loc[:,'team H']=away_df['team H'].apply(lambda x: teams_short_names.get(x, x) + ' (A)')
+      away_df.columns=['vs','gw','goalsc','xgc','shotsc','sibc','sotc','bcc']
+      away_df.loc[:,'delta_xgc']=away_df['goalsc']-away_df['xgc']
+      away_df['delta_xgc']=away_df['delta_xgc'].apply(lambda x:round(x,2))
+      away_df=away_df[['gw','vs','goalsc','xgc','delta_xgc','shotsc','sibc','sotc','bcc']]
+      overall_df=pd.concat([home_df,away_df],axis=0)
+      overall_df=overall_df.sort_values(by=['gw'])
+      result = [ row.to_dict() for _, row in overall_df.iterrows() ]
+      return result
+

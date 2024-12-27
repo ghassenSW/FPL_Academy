@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
-from teams_stats import num_gw,filter_by_gw,teams_names,get_text
+from teams_stats import num_gw,filter_by_gw,teams_names,get_text,get_matches
 from urllib.parse import unquote
 
 
@@ -214,6 +214,25 @@ def get_comparison():
             team_stats['team1']=[data for data in def_stats if data['team']==team1][0]
             team_stats['team2']=[data for data in def_stats if data['team']==team2][0]
     return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw,team1=team1,team2=team2)
+
+
+@app.route("/team_matches")
+def team_matches():
+    return render_template("team_matches.html",num_gw=num_gw,teams_names=teams_names)
+
+@app.route('/get_team_matches', methods=['POST','GET'])
+def get_team_matches():
+    data=request.get_json()
+    start_gw = int(data.get('start_gw', 1))
+    end_gw = int(data.get('end_gw', num_gw))
+    team=data.get('team','Arsenal')
+    atk_def=data.get('atk_def','atk')
+    data_type = data.get('data_type','overall')
+    if(team=='SELECT'):
+        team='select team'
+    else:
+        matches=get_matches(atk_def,data_type,team,start_gw,end_gw)
+    return jsonify(matches=matches,data_type=data_type,num_gw=num_gw,team=team)
 
 
 @app.route('/index')

@@ -347,6 +347,7 @@ def get_matches(stats_type,data_type,team,start_gw,end_gw):
     if data_type=='home':
       home=[i for i in stats if i['team H']==team]
       home_df=pd.DataFrame(home)
+      home_df=home_df.sort_values(by="GW",ascending=False)
       home_df=home_df[home_df['GW']>=start_gw]
       home_df=home_df[home_df['GW']<=end_gw]
       home_df=home_df[['team A','GW','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
@@ -361,6 +362,7 @@ def get_matches(stats_type,data_type,team,start_gw,end_gw):
     elif data_type=='away':
       away=[i for i in stats if i['team A']==team]
       away_df=pd.DataFrame(away)
+      away_df=away_df.sort_values(by="GW",ascending=False)
       away_df=away_df[away_df['GW']>=start_gw]
       away_df=away_df[away_df['GW']<=end_gw]
       away_df=away_df[['team H','GW','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
@@ -394,7 +396,7 @@ def get_matches(stats_type,data_type,team,start_gw,end_gw):
       away_df['delta_xg']=away_df['delta_xg'].apply(lambda x:round(x,2))
       away_df=away_df[['gw','vs','goals','xg','delta_xg','shots','sib','sot','bc']]
       overall_df=pd.concat([home_df,away_df],axis=0)
-      overall_df=overall_df.sort_values(by=['gw'])
+      overall_df=overall_df.sort_values(by=['gw'],ascending=False)
       result = [ row.to_dict() for _, row in overall_df.iterrows() ]
       return result
   
@@ -402,6 +404,7 @@ def get_matches(stats_type,data_type,team,start_gw,end_gw):
     if data_type=='home':
       home=[i for i in stats if i['team H']==team]
       home_df=pd.DataFrame(home)
+      home_df=home_df.sort_values(by="GW",ascending=False)
       home_df=home_df[home_df['GW']>=start_gw]
       home_df=home_df[home_df['GW']<=end_gw]
       home_df=home_df[['team A','GW','Goals A','xG A','Shots A','SiB A','SoT A','BC A']]
@@ -416,6 +419,7 @@ def get_matches(stats_type,data_type,team,start_gw,end_gw):
     elif data_type=='away':
       away=[i for i in stats if i['team A']==team]
       away_df=pd.DataFrame(away)
+      away_df=away_df.sort_values(by="GW",ascending=False)
       away_df=away_df[away_df['GW']>=start_gw]
       away_df=away_df[away_df['GW']<=end_gw]
       away_df=away_df[['team H','GW','Goals H','xG H','Shots H','SiB H','SoT H','BC H']]
@@ -449,7 +453,7 @@ def get_matches(stats_type,data_type,team,start_gw,end_gw):
       away_df['delta_xgc']=away_df['delta_xgc'].apply(lambda x:round(x,2))
       away_df=away_df[['gw','vs','goalsc','xgc','delta_xgc','shotsc','sibc','sotc','bcc']]
       overall_df=pd.concat([home_df,away_df],axis=0)
-      overall_df=overall_df.sort_values(by=['gw'])
-      result = [ row.to_dict() for _, row in overall_df.iterrows() ]
+      overall_df=overall_df.sort_values(by=['gw'],ascending=False)
+      result = [ row.to_dict() for _, row in overall_df.iterrows()]
       return result
 

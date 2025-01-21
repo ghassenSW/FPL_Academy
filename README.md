@@ -98,7 +98,7 @@ A comprehensive web-based tool designed for Fantasy Premier League (FPL) manager
    python app.py
    ```
 
-5. Access the application in your browser at `http://localhost:5000`.
+5. Access the application in your browser at `https://fplacademy.vercel.app/`.
 
 ---
 

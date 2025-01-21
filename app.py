@@ -234,6 +234,22 @@ def get_team_matches():
         matches=get_matches(atk_def,data_type,team,start_gw,end_gw)
     return jsonify(matches=matches,data_type=data_type,num_gw=num_gw,team=team)
 
+@app.route("/players_stats")
+def players_stats():
+    return render_template("players_stats.html",num_gw=num_gw)
+
+@app.route('/get_players_stats', methods=['POST'])
+def get_players_stats():
+    data=request.get_json()
+    start_gw = int(data.get('start_gw', 1))
+    end_gw = int(data.get('end_gw', num_gw))
+    stats_type=data.get('stats_type','atk')
+    sort_by=data.get('sort_by','team')
+    sort_order=data.get('sort_order','desc')
+
+    data_type = data.get('data_type')
+    stats_data=filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order)
+    return jsonify(stats=stats_data,data_type=data_type,num_gw=num_gw)
 
 @app.route('/index')
 def index():

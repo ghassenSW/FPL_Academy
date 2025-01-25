@@ -96,6 +96,12 @@ body {
     box-shadow: 0 2px 4px rgba(59, 36, 36, 0.1);
     text-align: center;
   }
+
+  .card:hover{
+    background: linear-gradient(135deg, #03ff7d, #00fff2); /* Bright gradient on hover */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Elevate shadow */
+    transform: scale(1.07);   /* Slightly enlarge the card */
+  }
   
   .card h3 {
     margin: 0 0 10px;

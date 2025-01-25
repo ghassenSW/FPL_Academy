@@ -20,9 +20,11 @@
         </div>
         <div class="page-header">
             <div class="switch-container">
-                <button id="overall-btn" class="switch-btn selected">Overall</button>
-                <button id="home-btn" class="switch-btn">Home</button>
-                <button id="away-btn" class="switch-btn">Away</button>
+                <button id="all-btn" class="switch-btn selected">All</button>
+                <button id="gk-btn" class="switch-btn">GK</button>
+                <button id="def-btn" class="switch-btn">DEF</button>
+                <button id="mid-btn" class="switch-btn">MID</button>
+                <button id="atk-btn" class="switch-btn">ATK</button>
             </div>
 
             <div class="gw-selection">
@@ -37,35 +39,56 @@
             <table class="standings-table">
                 <thead>
                     <tr>
-                        <th title="Team" class="fixed-column">
-                            <a href="#" data-sort-by="team" data-sort-order="desc">Team <span id="team"></span></a>
+                        <th title="Player" class="fixed-column">
+                            <a href="#" data-sort-by="team" data-sort-order="desc">Player <span id="team"></span></a>
                         </th>
-                        <th title="Matches Played">
-                            <a href="#" data-sort-by="games_played" data-sort-order="asc">Played <span id="games_played"></span></a>
+                        <th title="Team">
+                            <a href="#" data-sort-by="games_played" data-sort-order="asc">Team <span id="games_played"></span></a>
                         </th>
-                        <th title="Goals Scored">
-                            <a href="#" data-sort-by="goals" data-sort-order="asc">Goals <span id="goals"></span></a>
+                        <th title="Points">
+                            <a href="#" data-sort-by="goals" data-sort-order="asc">Pts <span id="goals"></span></a>
+                        </th>
+                        <th title="Minutes Played">
+                            <a href="#" data-sort-by="xg" data-sort-order="asc">MP <span id="xg"></span></a>
+                        </th>
+                        <th title="Goals">
+                            <a href="#" data-sort-by="delta_xg" data-sort-order="asc">Goals <span id="delta_xg"></span></a>
                         </th>
                         <th title="Expected Goals">
-                            <a href="#" data-sort-by="xg" data-sort-order="asc">xG <span id="xg"></span></a>
+                            <a href="#" data-sort-by="shots" data-sort-order="asc">xG <span id="shots"></span></a>
                         </th>
-                        <th title="G -xG">
-                            <a href="#" data-sort-by="delta_xg" data-sort-order="asc">Δ xG <span id="delta_xg"></span></a>
+                        <th title="Assists">
+                            <a href="#" data-sort-by="sib" data-sort-order="asc">Assists <span id="sib"></span></a>
+                        </th>
+                        <th title="Expected Assists">
+                            <a href="#" data-sort-by="sot" data-sort-order="asc">xA <span id="sot"></span></a>
+                        </th>
+                        <th title="Own Goals">
+                            <a href="#" data-sort-by="bc" data-sort-order="asc">OG <span id="bc"></span></a>
                         </th>
                         <th title="Shots">
-                            <a href="#" data-sort-by="shots" data-sort-order="asc">Shots <span id="shots"></span></a>
-                        </th>
-                        <th title="Shots in Box">
-                            <a href="#" data-sort-by="sib" data-sort-order="asc">SiB <span id="sib"></span></a>
-                        </th>
-                        <th title="Shots on Target">
-                            <a href="#" data-sort-by="sot" data-sort-order="asc">SoT <span id="sot"></span></a>
+                            <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">Shots <span id="failed_to_score"></span></a>
                         </th>
                         <th title="Big Chances">
-                            <a href="#" data-sort-by="bc" data-sort-order="asc">BC <span id="bc"></span></a>
+                            <a href="#" data-sort-by="shots" data-sort-order="asc">BC <span id="shots"></span></a>
                         </th>
-                        <th title="Failed To Score">
-                            <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">FTS <span id="failed_to_score"></span></a>
+                        <th title="Chances Created">
+                            <a href="#" data-sort-by="sib" data-sort-order="asc">CC <span id="sib"></span></a>
+                        </th>
+                        <th title="Big Chances Created">
+                            <a href="#" data-sort-by="sot" data-sort-order="asc">BCC <span id="sot"></span></a>
+                        </th>
+                        <th title="Shots On Target">
+                            <a href="#" data-sort-by="bc" data-sort-order="asc">SOT <span id="bc"></span></a>
+                        </th>
+                        <th title="Total Bonuses">
+                            <a href="#" data-sort-by="bc" data-sort-order="asc">Bonus <span id="bc"></span></a>
+                        </th>
+                        <th title="Hit Woodwork">
+                            <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">HW <span id="failed_to_score"></span></a>
+                        </th>
+                        <th title="Totla Crosses">
+                            <a href="#" data-sort-by="failed_to_score" data-sort-order="asc">Tot Cross <span id="failed_to_score"></span></a>
                         </th>
                     </tr>
                 </thead>
@@ -76,7 +99,7 @@
     </div>
 
     <script>
-        let currentDataType = 'overall';
+        let corrend_position = 'all';
         let num_gw;
         let sortBy='team';
         let sortOrder='asc';
@@ -89,69 +112,52 @@
                 sortOrder = $this.data('sort-order');
                 sortOrder = (sortOrder === 'asc') ? 'desc' : 'asc';
                 $this.data('sort-order', sortOrder);
-                fetchAndSendStats(currentDataType);
+                fetchAndSendStats(corrend_position);
             });
         });
-
-        function calculateColor(value) {
-            const normalized = Math.floor((value - 1) / 4) / 4; // Normalize between 0 and 1
-            const blue = Math.round(64 + 191 * (1 - normalized)); // Range for blue: 64 to 255
-            const redAndGreen = Math.round(64 + 191 * normalized); // Range for red & green: 64 to 255
-            return `rgb(${redAndGreen}, ${redAndGreen}, 255)`; // Gradient from (64, 64, 255) to (255, 255, 255)
-        }
-
-        function change_color(value) {
-            if(value<=4){
-                return 'white'
-            }
-            return 'black'
-        }
 
         function updateTable(data) {
             const tableBody = document.getElementById('data-table');
             tableBody.innerHTML = '';
-            data.forEach(function(team) {
+            data.forEach(function(player) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="fixed-column">${team.team}</td>
-                    <td>${team.games_played}</td>
-                    <td title="Rank by Goals: ${team.goal_rank}" style="background-color: ${calculateColor(team.goal_rank)};color:${change_color(team.goal_rank)}">${team.goals}</td>
-                    <td title="Rank by xG: ${team.xg_rank}" style="background-color: ${calculateColor(team.xg_rank)};color:${change_color(team.xg_rank)}">${team.xg}</td>
-                    <td title="Rank by Δ xG: ${team.delta_xg_rank}" style="background-color: ${calculateColor(team.delta_xg_rank)};color:${change_color(team.delta_xg_rank)}">${team.delta_xg}</td>
-                    <td title="Rank by Shots: ${team.shots_rank}" style="background-color: ${calculateColor(team.shots_rank)};color:${change_color(team.shots_rank)}">${team.shots}</td>
-                    <td title="Rank by SiB: ${team.sib_rank}" style="background-color: ${calculateColor(team.sib_rank)};color:${change_color(team.sib_rank)}">${team.sib}</td>
-                    <td title="Rank by SoT: ${team.sot_rank}" style="background-color: ${calculateColor(team.sot_rank)};color:${change_color(team.sot_rank)}">${team.sot}</td>
-                    <td title="Rank by BC: ${team.bc_rank}" style="background-color: ${calculateColor(team.bc_rank)};color:${change_color(team.bc_rank)}">${team.bc}</td>
-                    <td title="Rank by FTS: ${team.fts_rank}" style="background-color: ${calculateColor(team.fts_rank)};color:${change_color(team.fts_rank)}">${team.failed_to_score}</td>
+                    <td class="fixed-column" title="${player.position}">${player.web_name}</td>
+                    <td>${player.team}</td>
+                    <td>${player.total_points}</td>
+                    <td>${player.minutes_played}</td>
+                    <td>${player.goals}</td>
+                    <td>${player.xG}</td>
+                    <td>${player.assists}</td>
+                    <td>${player.xA}</td>
+                    <td>${player.OG}</td>
+                    <td>${player.shots}</td>
+                    <td>${player.bc}</td>
+                    <td>${player.chances_created}</td>
+                    <td>${player.bc_created}</td>
+                    <td>${player.sot}</td>
+                    <td>${player.bonus}</td>
+                    <td>${player.hit_wood_work}</td>
+                    <td>${player.total_cross}</td>
                 `;
                 tableBody.appendChild(row);
             });
-            const spans = document.querySelectorAll('span');
-            spans.forEach(span => {
-                span.textContent = '';
-            });
-            const summarySpan = document.getElementById(sortBy);
-            var sort_icon = (sortOrder === 'desc') ? '▼' : '▲';
-            if (sortBy=='team'){
-                sort_icon = (sort_icon === '▲') ? '▼' : '▲';
-            }
-            summarySpan.textContent = sort_icon;
+            
         }
         function fetchAndSendStats(dataType) {
             const startGw = $('#start-gw').val();
             const endGw = $('#end-gw').val();
 
             $.ajax({
-                url: '/get_stats',
+                url: '/get_players_stats',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    data_type: dataType,
+                    position: dataType,
                     start_gw: startGw,
                     end_gw: endGw,
                     sort_by:sortBy,
-                    sort_order:sortOrder,
-                    stats_type:'atk'
+                    sort_order:sortOrder
                 }),
                 success: function(response) {
                     updateTable(response['stats']);
@@ -164,22 +170,30 @@
         }
 
         $(document).ready(function() {
-            fetchAndSendStats(currentDataType);
+            fetchAndSendStats(corrend_position);
         });
         $('#apply-gw').click(function() {
-            fetchAndSendStats(currentDataType);
+            fetchAndSendStats(corrend_position);
         })
-        $('#overall-btn').click(function() {
-            currentDataType = 'overall';
-            fetchAndSendStats(currentDataType);
+        $('#all-btn').click(function() {
+            corrend_position = 'all';
+            fetchAndSendStats(corrend_position);
         })
-        $('#home-btn').click(function() {
-            currentDataType = 'home';
-            fetchAndSendStats(currentDataType);
+        $('#gk-btn').click(function() {
+            corrend_position = 'GKP';
+            fetchAndSendStats(corrend_position);
         })
-        $('#away-btn').click(function() {
-            currentDataType = 'away';
-            fetchAndSendStats(currentDataType);
+        $('#def-btn').click(function() {
+            corrend_position = 'DEF';
+            fetchAndSendStats(corrend_position);
+        })
+        $('#mid-btn').click(function() {
+            corrend_position = 'MID';
+            fetchAndSendStats(corrend_position);
+        })
+        $('#atk-btn').click(function() {
+            corrend_position = 'FWD';
+            fetchAndSendStats(corrend_position);
         })
 
         // gw selection

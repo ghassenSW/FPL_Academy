@@ -7,6 +7,7 @@ from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
 from teams_stats import num_gw,filter_by_gw,teams_names,get_text,get_matches
+from players_stats import prepare_players
 from urllib.parse import unquote
 
 
@@ -243,13 +244,10 @@ def get_players_stats():
     data=request.get_json()
     start_gw = int(data.get('start_gw', 1))
     end_gw = int(data.get('end_gw', num_gw))
-    stats_type=data.get('stats_type','atk')
-    sort_by=data.get('sort_by','team')
-    sort_order=data.get('sort_order','desc')
 
-    data_type = data.get('data_type')
-    stats_data=filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order)
-    return jsonify(stats=stats_data,data_type=data_type,num_gw=num_gw)
+    position = data.get('position')
+    stats_data=prepare_players(position,start_gw,end_gw)
+    return jsonify(stats=stats_data,position=position,num_gw=num_gw)
 
 @app.route('/index')
 def index():

@@ -22,6 +22,8 @@ players_stats_db=db['players_stats']
 stats=list(players_stats_db.find())
 df=pd.DataFrame(stats)
 players_names=list(df['web_name'])
+id_player=dict(zip(df['id'].astype(int),df['web_name']))
+
 
 def prepare_players(position,start_gw,end_gw):
     stats=list(players_stats_db.find())
@@ -29,11 +31,25 @@ def prepare_players(position,start_gw,end_gw):
     df=df[(df['num_gw']>=start_gw) & (df['num_gw']<=end_gw)]
     if position!='all':
        df=df[df['position']==position]
-    df=df[['web_name','position','team','minutes_played','xG','xA','assists','goals','bonus','OG','shots','bc','chances_created','bc_created','sot','hit_wood_work','total_cross','total_points']]
-    df=df.groupby(["web_name","team","position"], as_index=False).sum()
+    df=df[['id','web_name','position','team','minutes_played','xG','xA','assists','goals','bonus','OG','shots','bc','chances_created','bc_created','sot','hit_wood_work','total_cross','total_points']]
+    df=df.groupby(["web_name","team","position","id"], as_index=False).sum()
     df['xG']= df["xG"].round(2)
     df['xA']=df["xA"].round(2)
     df=df.sort_values(by="total_points",ascending=False)
     df = df.to_dict(orient="index")
     df=[v for k,v in df.items()]
     return df
+
+def get_player_matches(player_id,start_gw,end_gw):
+  stats=list(players_stats_db.find())
+  df=pd.DataFrame(stats)
+  df=df[['id','num_gw','opp_team','total_points','minutes_played','goals','xG','assists','xA','goals_conceded','CS','shots','sot','bc','chances_created','bc_created','hit_wood_work','total_cross','penalties_missed','saves','penalties_saved','bonus','bps','OG','yellow_cards','red_cards','value']]
+  df=df[(df['num_gw']>=start_gw) & (df['num_gw']<=end_gw)]
+  df=df[df['id']==player_id]
+  df['xG']= df["xG"].round(2)
+  df['xA']=df["xA"].round(2)
+  df=df.sort_values(by="num_gw",ascending=False)
+  df = df.to_dict(orient="index")
+  df=[v for k,v in df.items()]
+  return df
+

@@ -35,6 +35,7 @@
                 <button id="apply-gw">Apply</button>
             </div>
         </div>
+        
         <div class="table-wrapper">
             <table class="standings-table">
                 <thead>
@@ -115,14 +116,20 @@
                 fetchAndSendStats(corrend_position);
             });
         });
+        const playerPageBaseUrl = "{{ url_for('player_page', player_id='') }}"; // Base URL
 
         function updateTable(data) {
             const tableBody = document.getElementById('data-table');
             tableBody.innerHTML = '';
             data.forEach(function(player) {
                 const row = document.createElement('tr');
+                const playerPageUrl = `${playerPageBaseUrl}${player.id}`; // Append player ID
                 row.innerHTML = `
-                    <td class="fixed-column" title="${player.position}">${player.web_name}</td>
+                    <td class="fixed-column" title="${player.position}">
+                        <a href="${playerPageUrl}" class="team-link">
+                            ${player.web_name}  
+                        </a>
+                    </td>
                     <td>${player.team}</td>
                     <td>${player.total_points}</td>
                     <td>${player.minutes_played}</td>

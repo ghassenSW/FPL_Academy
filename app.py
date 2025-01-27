@@ -7,7 +7,7 @@ from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
 from teams_stats import num_gw,filter_by_gw,teams_names,get_text,get_matches
-from players_stats import prepare_players
+from players_stats import prepare_players,get_player_matches,id_player
 from urllib.parse import unquote
 
 
@@ -159,6 +159,7 @@ def get_stats():
     stats_data=filter_by_gw(stats_type,data_type,start_gw,end_gw,sort_by,sort_order)
     return jsonify(stats=stats_data,data_type=data_type,num_gw=num_gw)
 
+# team card
 @app.route("/team_card")
 def team_card():
     return render_template("team_card.html",num_gw=num_gw,teams_names=teams_names)
@@ -187,6 +188,7 @@ def get_team_page():
     atk_text,def_text=get_text(team_name,start_gw,end_gw,team_stats,data_type)
     return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw,atk_text=atk_text,def_text=def_text)
 
+# team comparison
 @app.route("/team_comparison")
 def team_comparison():
     return render_template("team_comparison.html",num_gw=num_gw,teams_names=teams_names)
@@ -216,7 +218,7 @@ def get_comparison():
             team_stats['team2']=[data for data in def_stats if data['team']==team2][0]
     return jsonify(team_stats=team_stats,data_type=data_type,num_gw=num_gw,team1=team1,team2=team2)
 
-
+# team matches
 @app.route("/team_matches")
 def team_matches():
     return render_template("team_matches.html",num_gw=num_gw,teams_names=teams_names)
@@ -235,6 +237,7 @@ def get_team_matches():
         matches=get_matches(atk_def,data_type,team,start_gw,end_gw)
     return jsonify(matches=matches,data_type=data_type,num_gw=num_gw,team=team)
 
+# players stats
 @app.route("/players_stats")
 def players_stats():
     return render_template("players_stats.html",num_gw=num_gw)
@@ -248,6 +251,24 @@ def get_players_stats():
     position = data.get('position')
     stats_data=prepare_players(position,start_gw,end_gw)
     return jsonify(stats=stats_data,position=position,num_gw=num_gw)
+
+@app.route('/player_page/<player_id>', methods=['GET', 'POST'])
+def player_page(player_id):
+    player_id = unquote(player_id)
+    session['player_id']=player_id
+    print(player_id)
+    player_name=id_player[int(player_id)]
+    return render_template("player_page.html", player_name=player_name,num_gw=num_gw)
+
+@app.route('/get_player_page', methods=['POST'])
+def get_player_page():
+    data=request.get_json()
+    start_gw = int(data.get('start_gw', 1))
+    end_gw = int(data.get('end_gw', num_gw))
+    player_id = session.get('player_id')
+    player_id = int(unquote(player_id))
+    fix=get_player_matches(player_id,start_gw,end_gw)
+    return jsonify(fix=fix,num_gw=num_gw)
 
 @app.route('/index')
 def index():

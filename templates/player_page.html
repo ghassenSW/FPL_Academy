@@ -16,7 +16,7 @@
     <div class="container" id="container" style="display: none;">
         <div class="title-container">
             <div>{{player_name|upper}} STATS</div>
-            <div class="subtitle">This is a Gameweek by Gameweek stats for your Player</div>
+            <div class="subtitle">Take a look at your player GW by GW</div>
         </div>
         <div class="page-header">
             <div class="gw-selection">
@@ -74,7 +74,7 @@
         for (const match of data){
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td style="font-weight:bold">${match.num_gw}</td>
+                <td style="font-weight:bold" class="fixed-column">${match.num_gw}</td>
                 <td>${match.opp_team}</td>
                 <td>${match.total_points}</td>
                 <td>${match.minutes_played}</td>

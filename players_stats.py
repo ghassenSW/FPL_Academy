@@ -14,6 +14,8 @@ except Exception as e:
   except Exception as e2:
     print(e2)
 
+teams_tag = {'Arsenal': 'ARS','Chelsea': 'CHE','Brentford': 'BRE','Bournemouth': 'BOU','Crystal Palace': 'CRY','Fulham': 'FUL','West Ham': 'WHU','Everton': 'EVE','Wolves': 'WOL','Southampton': 'SOU','Brighton': 'BHA','Man City': 'MCI','Liverpool': 'LIV','Aston Villa': 'AVL','Man Utd': 'MUN','Leicester': 'LEI',"Nott'm Forest": 'NFO','Newcastle': 'NEW','Spurs': 'TOT','Ipswich': 'IPS'}
+
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
 collection = db['fpl_data']
@@ -32,7 +34,8 @@ def prepare_players(position,start_gw,end_gw):
     if position!='all':
        df=df[df['position']==position]
     df=df[['id','web_name','position','team','minutes_played','xG','xA','assists','goals','bonus','OG','shots','bc','chances_created','bc_created','sot','hit_wood_work','total_cross','total_points']]
-    df=df.groupby(["web_name","team","position","id"], as_index=False).sum()
+    df['team_tag']=df['team'].map(teams_tag)
+    df=df.groupby(["web_name","team","position","id",'team_tag'], as_index=False).sum()
     df['xG']= df["xG"].round(2)
     df['xA']=df["xA"].round(2)
     df=df.sort_values(by="total_points",ascending=False)
@@ -52,4 +55,3 @@ def get_player_matches(player_id,start_gw,end_gw):
   df = df.to_dict(orient="index")
   df=[v for k,v in df.items()]
   return df
-

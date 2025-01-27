@@ -22,12 +22,11 @@ th a {
     color: inherit;
 }
 .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    box-sizing: border-box;
-    width: 100%;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  min-height: 10vh; /* Ensure the body takes up the full viewport height */
+  margin: 0; 
 }
 
 /* Title Container */
@@ -96,15 +95,14 @@ th a {
 }
 /* GW Selection - upper right */
 .gw-selection {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 0px;
-    box-shadow: 10px 8px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px 20px;
-    width: 450px; /* Set consistent width */
-    box-sizing: border-box;
-    margin: 0; /* Remove default margin */
-    text-align: center; /* Optional: Center-align content inside */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 0px;
+  box-shadow: 10px 8px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  width: 450px; /* Set consistent width */
+  box-sizing: border-box;
+  text-align: center; /* Optional: Center-align content inside */
 }
 
 /* Labels */

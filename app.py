@@ -256,7 +256,6 @@ def get_players_stats():
 def player_page(player_id):
     player_id = unquote(player_id)
     session['player_id']=player_id
-    print(player_id)
     player_name=id_player[int(player_id)]
     return render_template("player_page.html", player_name=player_name,num_gw=num_gw)
 

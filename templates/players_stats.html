@@ -43,9 +43,6 @@
                         <th title="Player" class="fixed-column">
                             <a href="#" data-sort-by="team" data-sort-order="desc">Player <span id="team"></span></a>
                         </th>
-                        <th title="Team">
-                            <a href="#" data-sort-by="games_played" data-sort-order="asc">Team <span id="games_played"></span></a>
-                        </th>
                         <th title="Points">
                             <a href="#" data-sort-by="goals" data-sort-order="asc">Pts <span id="goals"></span></a>
                         </th>
@@ -125,12 +122,16 @@
                 const row = document.createElement('tr');
                 const playerPageUrl = `${playerPageBaseUrl}${player.id}`; // Append player ID
                 row.innerHTML = `
-                    <td class="fixed-column" title="${player.position}">
-                        <a href="${playerPageUrl}" class="team-link">
-                            ${player.web_name}  
+                    <td class="fixed-column">
+                        <a href="${playerPageUrl}">
+                            <div>
+                                <div class="player-info">
+                                    <span class="player-name">${player.web_name}</span>
+                                    <div class="player-team">${player.team_tag} ${player.position}</div>
+                                </div>
+                            </div>
                         </a>
                     </td>
-                    <td>${player.team}</td>
                     <td>${player.total_points}</td>
                     <td>${player.minutes_played}</td>
                     <td>${player.goals}</td>

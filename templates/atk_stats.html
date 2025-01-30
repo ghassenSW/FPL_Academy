@@ -113,7 +113,7 @@
             data.forEach(function(team) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="fixed-column">${team.team}</td>
+                    <td class="fixed-column" style="font-weight: bold;">${team.team}</td>
                     <td>${team.games_played}</td>
                     <td title="Rank by Goals: ${team.goal_rank}" style="background-color: ${calculateColor(team.goal_rank)};color:${change_color(team.goal_rank)}">${team.goals}</td>
                     <td title="Rank by xG: ${team.xg_rank}" style="background-color: ${calculateColor(team.xg_rank)};color:${change_color(team.xg_rank)}">${team.xg}</td>

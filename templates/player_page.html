@@ -26,7 +26,10 @@
                 <input type="number" id="end-gw" min="1" max="{{ num_gw }}" value="{{ num_gw }}">
                 <button id="apply-gw">Apply</button>
             </div>
+            <div class="player-container" id="player_image">
+            </div>
         </div>
+
 
         <div class="table-wrapper">
             <table class="standings-table">
@@ -69,6 +72,11 @@
   <script>
     let num_gw;
     function updateTable(data) {
+        const player_image=document.getElementById('player_image')
+        const player_code=data[0].opta_code
+        const player_name=data[0].web_name
+        player_image.innerHTML=`
+        <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/${player_code}.png" alt="${player_name}">`
         const tableBody = document.getElementById('data-table');
         tableBody.innerHTML = ``;
         for (const match of data){

@@ -24,9 +24,7 @@ players_stats_db=db['players_stats']
 stats=list(players_stats_db.find())
 df=pd.DataFrame(stats)
 players_names=list(df['web_name'])
-id_player=dict(zip(df['id'].astype(int),df['web_name']))
-
-
+id_player=dict(zip(df['id'],df['web_name']))
 def prepare_players(position,start_gw,end_gw):
     stats=list(players_stats_db.find())
     df=pd.DataFrame(stats)
@@ -46,7 +44,7 @@ def prepare_players(position,start_gw,end_gw):
 def get_player_matches(player_id,start_gw,end_gw):
   stats=list(players_stats_db.find())
   df=pd.DataFrame(stats)
-  df=df[['id','num_gw','opp_team','total_points','minutes_played','goals','xG','assists','xA','goals_conceded','CS','shots','sot','bc','chances_created','bc_created','hit_wood_work','total_cross','penalties_missed','saves','penalties_saved','bonus','bps','OG','yellow_cards','red_cards','value']]
+  df=df[['id','num_gw','opp_team','total_points','minutes_played','goals','xG','assists','xA','goals_conceded','CS','shots','sot','bc','chances_created','bc_created','hit_wood_work','total_cross','penalties_missed','saves','penalties_saved','bonus','bps','OG','yellow_cards','red_cards','value','opta_code']]
   df=df[(df['num_gw']>=start_gw) & (df['num_gw']<=end_gw)]
   df=df[df['id']==player_id]
   df['xG']= df["xG"].round(2)

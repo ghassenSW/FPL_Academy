@@ -26,7 +26,7 @@ th a {
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   min-height: 10vh; /* Ensure the body takes up the full viewport height */
-  margin: 0; 
+  gap:100px;
 }
 
 /* Title Container */
@@ -219,7 +219,6 @@ button#apply-gw:active {
 /* Make data inside the table bold */
 .standings-table td {
     font-size: 13px;
-    font-weight: bold; /* Bold style for table data */
 }
 
 .standings-table th {
@@ -412,3 +411,19 @@ th:hover::after {
     background-color: #2DE68A; /* Green hover effect */
   }
   
+  .player-container {
+    padding: 10px;
+    border-radius: 15px; /* Smooth rounded corners */
+    background: rgba(255, 255, 255, 0.1); /* Glassmorphism effect */
+    backdrop-filter: blur(8px); /* Blur effect */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Soft shadow */
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Light border */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-container img {
+    width: 100%;
+    border-radius: 10px;
+}

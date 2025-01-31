@@ -6,6 +6,7 @@
     <title>Premier League Stats</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='teams_stats.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='logo.jpg') }}">
 
 </head>
 <body>
@@ -33,6 +34,19 @@
                 <label for="end-gw">End GW:</label>
                 <input type="number" id="end-gw" min="1" max="{{ num_gw }}" value="{{ num_gw }}">
                 <button id="apply-gw">Apply</button>
+            </div>
+            
+            <div class="switch-container">
+                <div class="team-selection">
+                    <label for="team">TEAM</label>
+                    <select name="team" id="team" required>
+                        <option value="ALL" selected>ALL</option>
+                        {% for team in teams_names %}
+                        <option value="{{ team }}">{{ team }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="compare-button" id="team_selection_btn">CHOSE</button>
+                </div>
             </div>
         </div>
         
@@ -155,6 +169,7 @@
         function fetchAndSendStats(dataType) {
             const startGw = $('#start-gw').val();
             const endGw = $('#end-gw').val();
+            const team=$('#team').val();
 
             $.ajax({
                 url: '/get_players_stats',
@@ -165,7 +180,8 @@
                     start_gw: startGw,
                     end_gw: endGw,
                     sort_by:sortBy,
-                    sort_order:sortOrder
+                    sort_order:sortOrder,
+                    team:team
                 }),
                 success: function(response) {
                     updateTable(response['stats']);
@@ -180,6 +196,9 @@
         $(document).ready(function() {
             fetchAndSendStats(corrend_position);
         });
+        $('#team_selection_btn').click(function() {
+            fetchAndSendStats(corrend_position);
+        })
         $('#apply-gw').click(function() {
             fetchAndSendStats(corrend_position);
         })

@@ -15,6 +15,7 @@ except Exception as e:
     print(e2)
 
 teams_tag = {'Arsenal': 'ARS','Chelsea': 'CHE','Brentford': 'BRE','Bournemouth': 'BOU','Crystal Palace': 'CRY','Fulham': 'FUL','West Ham': 'WHU','Everton': 'EVE','Wolves': 'WOL','Southampton': 'SOU','Brighton': 'BHA','Man City': 'MCI','Liverpool': 'LIV','Aston Villa': 'AVL','Man Utd': 'MUN','Leicester': 'LEI',"Nott'm Forest": 'NFO','Newcastle': 'NEW','Spurs': 'TOT','Ipswich': 'IPS'}
+teams_names_fpl=sorted(list(teams_tag.keys()))
 
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
@@ -25,13 +26,15 @@ stats=list(players_stats_db.find())
 df=pd.DataFrame(stats)
 players_names=list(df['web_name'])
 id_player=dict(zip(df['id'],df['web_name']))
-def prepare_players(position,start_gw,end_gw):
+def prepare_players(position,start_gw,end_gw,team):
     stats=list(players_stats_db.find())
     df=pd.DataFrame(stats)
     df=df[(df['num_gw']>=start_gw) & (df['num_gw']<=end_gw)]
     if position!='all':
        df=df[df['position']==position]
     df=df[['id','web_name','position','team','minutes_played','xG','xA','assists','goals','bonus','OG','shots','bc','chances_created','bc_created','sot','hit_wood_work','total_cross','total_points']]
+    if team!='ALL':
+      df=df[df['team']==team]
     df['team_tag']=df['team'].map(teams_tag)
     df=df.groupby(["web_name","team","position","id",'team_tag'], as_index=False).sum()
     df['xG']= df["xG"].round(2)

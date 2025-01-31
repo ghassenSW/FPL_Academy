@@ -7,7 +7,7 @@ from datetime import datetime
 from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
 from teams_stats import num_gw,filter_by_gw,teams_names,get_text,get_matches
-from players_stats import prepare_players,get_player_matches,id_player
+from players_stats import prepare_players,get_player_matches,id_player,teams_names_fpl
 from urllib.parse import unquote
 
 
@@ -240,16 +240,16 @@ def get_team_matches():
 # players stats
 @app.route("/players_stats")
 def players_stats():
-    return render_template("players_stats.html",num_gw=num_gw)
+    return render_template("players_stats.html",num_gw=num_gw,teams_names=teams_names_fpl)
 
 @app.route('/get_players_stats', methods=['POST'])
 def get_players_stats():
     data=request.get_json()
     start_gw = int(data.get('start_gw', 1))
     end_gw = int(data.get('end_gw', num_gw))
-
+    team=data.get('team','all')
     position = data.get('position')
-    stats_data=prepare_players(position,start_gw,end_gw)
+    stats_data=prepare_players(position,start_gw,end_gw,team)
     return jsonify(stats=stats_data,position=position,num_gw=num_gw)
 
 @app.route('/player_page/<player_id>', methods=['GET', 'POST'])

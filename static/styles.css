@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #F1F1F1;
+    background: linear-gradient(90deg, #acf5df, #a7d2fd);
     color: #333;
   }
   
@@ -70,16 +70,18 @@ body {
   }
   
   header .btn-action {
-    background-color: #0091D5;
+    background-color: #20c4d3;
     color: #fff;
     border: none;
+    font-size:20px;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 50px;
     cursor: pointer;
   }
   
   header .btn-action:hover {
-    background-color: #A5D8DD;
+    background-color: #00ffae;
+
   }
   
   /* Cards Section */

@@ -269,6 +269,11 @@ def get_player_page():
     fix=get_player_matches(player_id,start_gw,end_gw)
     return jsonify(fix=fix,num_gw=num_gw)
 
+# chatbot
+@app.route("/chatbot")
+def chatbot():
+    return render_template("chatbot.html")
+
 @app.route('/index')
 def index():
     if 'loggedin' in session:

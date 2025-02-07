@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(100deg, #04ffb4, #af25ef);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            width: 600px;
+            height: 80vh;
+            background: linear-gradient(90deg, #acf5df, #a7d2fd);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-box {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .bot-message {
+            font-size:20px;
+            background: linear-gradient(90deg, #58907f, #4e769e);
+            align-self: flex-start;
+        }
+        .user-message {
+            font-size:20px;
+            background: #2478ff;
+            align-self: flex-end;
+        }
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #333;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            font-size:20px;
+            background-color:black;
+            color: white;
+            outline: none;
+        }
+        button {
+            font-size:20px;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        /* Style for the logo link */
+        .logo-link {
+        position: absolute;
+        top: 10px; /* Distance from the top of the page */
+        left: 10px; /* Distance from the left of the page */
+        z-index: 1000; /* Ensure it is above other elements */
+        text-decoration: none; /* Remove underline (if any) */
+        }
+
+        /* Style for the logo image */
+        .logo {
+        width: 120px; /* Set the size of the logo */
+        height: 120px; /* Make height equal to width for a perfect circle */
+        object-fit: cover; /* Ensure the logo fits within the circle */
+        border-radius: 50%; /* Make the image circular */
+        cursor: pointer; /* Show pointer cursor to indicate it's clickable */
+        }
+
+        .logo:hover {
+        opacity: 0.8; /* Slightly dim the logo on hover */
+        }
+  
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('index') }}" class="logo-link">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Home" class="logo">
+    </a>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <div class="message bot-message">Hello! How can I help you?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            const input = document.getElementById("user-input");
+            const message = input.value.trim();
+            if (message === "") return;
+            const chatBox = document.getElementById("chat-box");
+            
+            // User message
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user-message");
+            userMessage.textContent = message;
+            chatBox.appendChild(userMessage);
+            
+            // Bot response (simple reply)
+            const botMessage = document.createElement("div");
+            botMessage.classList.add("message", "bot-message");
+            botMessage.textContent = "I'm just a simple bot!";
+            chatBox.appendChild(botMessage);
+            
+            input.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

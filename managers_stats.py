@@ -1,5 +1,8 @@
 import pandas as pd
 import requests
+from teams_stats import num_gw
+import os 
+from pymongo import MongoClient
 
 def url_to_df(url,key=None):
   response = requests.get(url)
@@ -13,19 +16,18 @@ def url_to_df(url,key=None):
   else:
       print(f"Error: {response.status_code}")
 
-managers=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','elements')
-managers=managers[managers['element_type']==5]
-team_manager=dict(zip(managers['team'],managers['web_name']))
-teams=url_to_df('https://fantasy.premierleague.com/api/bootstrap-static/','teams')
-id_team=dict(zip(teams['id'],teams['name']))
-team_position=dict(zip(teams['id'],teams['position']))
+try:
+  from dotenv import load_dotenv
+  load_dotenv()
+  MONGODB_URI=os.getenv('MONGODB_URI')
+except Exception as e:
+  try:
+    MONGODB_URI=os.environ.get('MONGODB_URI')
+  except Exception as e2:
+    print(e2)
 
-df=teams[['name','position','id']]
-df['manager'] = df['id'].map(team_manager)
-teams_table=df.to_dict(orient="index")
-teams_table=[v for k,v in teams_table.items()]
-for team_dict in teams_table:
-  matches=matches=url_to_df('https://fantasy.premierleague.com/api/fixtures/?future=1')
-  matches=matches[(matches['team_a']==team_dict['id']) | (matches['team_h']==team_dict['id'])][['team_a','team_h']]
-  matches['opp_team']=matches['team_a']+matches['team_h']-team_dict['id']
-  team_dict['fix']=([{str(id_team[x]): team_position[x]} for x in matches['opp_team']])
+client = MongoClient(MONGODB_URI)
+db = client['my_database']
+managers_stats_db=db['managers_stats']
+teams_table = list(managers_stats_db.find({}, {"_id": 0}))
+print(teams_table[4])

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier League Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assistant_manager.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='logo.jpg') }}">
+
+</head>
+<body>
+    <a href="{{ url_for('index') }}" class="logo-link">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Home" class="logo">
+    </a>
+    <div class="container" id="container">
+        <div class="title-container">
+            <div>FPL ASSISTANT MANAGER PLANNER</div>
+            <div class="subtitle">Chose the best GW for your new Assistnat Manager chip</div>
+        </div>
+        <div class="table-wrapper">
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th class="fixed-column">Team</th>
+                        <th>Manager</th>
+                        <th style="width: 90px;">Position</th>
+                        {%for i in range(num_gw+1,37)%}
+                            <th>GW {{i}}</th>
+                        {%endfor%}
+                    </tr>
+                </thead>
+                <tbody id="data-table">
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function position_to_colour(own_pos,opp_pos) {
+            if(own_pos<opp_pos){
+                return 'team easy'
+            }
+            else if (own_pos>opp_pos && own_pos<opp_pos+5){
+                return 'team neutral'
+            }
+            else{
+                return 'team hard'
+            }
+        }   
+        function calculate_max(own_pos,opp_pos1,opp_pos2,opp_pos3){
+            res=18
+            if(own_pos>=opp_pos1+5){
+                res+=10
+            }
+            if(own_pos>=opp_pos2+5){
+                res+=10
+            }
+            if(own_pos>=opp_pos3+5){
+                res+=10
+            }
+            return res
+        }
+        function updateTable(data,num_gw) {
+            const tableBody = document.getElementById('data-table');
+            data.forEach(function(team) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                        <td class="fixed-column" style="font-size:21px">${team.name}</td>
+                        <td style="font-size:18px">${team.manager}</td>
+                        <td style="font-size:21px">${team.position}</td>
+                `;
+                for (let i=num_gw+1;i<37;i++){
+                    let td = document.createElement("td");
+                    td.className = "fixture-cell";
+                    let fix1 = team.fix[i - num_gw - 1] || {}; 
+                    let fix2 = team.fix[i + 1 - num_gw - 1] || {}; 
+                    let fix3 = team.fix[i + 2 - num_gw - 1] || {}; 
+
+                    let opp1 = Object.keys(fix1)[0] || "";
+                    let opp2 = Object.keys(fix2)[0] || "";
+                    let opp3 = Object.keys(fix3)[0] || "";
+
+                    let pos1 = opp1 ? fix1[opp1] : "";
+                    let pos2 = opp2 ? fix2[opp2] : "";
+                    let pos3 = opp3 ? fix3[opp3] : "";
+
+                    let result1 = team.result[i - num_gw - 1]; 
+                    let result2 = team.result[i + 1 - num_gw - 1]
+                    let result3 = team.result[i + 2 - num_gw - 1]
+                    let result=result1+result2+result3
+                    td.innerHTML=`
+                    <div class="score">${result}<small>/${calculate_max(team.position,pos1,pos2,pos3)}</small></div>
+                    <div class="teams">
+                        <span class="${position_to_colour(team.position,pos1)}">${opp1}</span>
+                        <span class="${position_to_colour(team.position,pos2)}">${opp2}</span>
+                        <span class="${position_to_colour(team.position,pos3)}">${opp3}</span>
+                    </div>
+                    `
+                    row.appendChild(td);
+                }
+
+                    
+                
+                tableBody.appendChild(row);
+        })}
+        $.ajax({
+            url: '/get_assistant_manager',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({}),
+            success: function(response) {
+                updateTable(response['stats'],response['num_gw']);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+        
+
+
+    </script>
+</body>
+</html>

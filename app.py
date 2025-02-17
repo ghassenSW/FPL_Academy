@@ -8,6 +8,7 @@ from price_change import get_price_change_text
 from injury_updates import get_injury_updates_text
 from teams_stats import num_gw,filter_by_gw,teams_names,get_text,get_matches
 from players_stats import prepare_players,get_player_matches,id_player,teams_names_fpl
+from managers_stats import teams_table
 from urllib.parse import unquote
 
 
@@ -273,6 +274,16 @@ def get_player_page():
 @app.route("/chatbot")
 def chatbot():
     return render_template("chatbot.html")
+
+# assistant manager
+@app.route("/assistant_manager")
+def assistant_manager():
+    return render_template("assistant_manager.html",stats=teams_table,num_gw=num_gw,teams_names=teams_names)
+
+@app.route('/get_assistant_manager', methods=['POST'])
+def get_assistant_manager():
+    return jsonify(stats=teams_table,num_gw=num_gw,teams_names=teams_names)
+
 
 @app.route('/index')
 def index():

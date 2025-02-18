@@ -30,4 +30,4 @@ client = MongoClient(MONGODB_URI)
 db = client['my_database']
 managers_stats_db=db['managers_stats']
 teams_table = list(managers_stats_db.find({}, {"_id": 0}))
-print(teams_table[4])
+teams_table = sorted(teams_table, key=lambda x: x["position"])
